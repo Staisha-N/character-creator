@@ -4,15 +4,6 @@ from typing_extensions import TypedDict
 
 llm = ChatOllama(model="gpt-oss:20b")
 
-# Graph state
-class State(TypedDict):
-    strength: int
-    dexterity: int
-    constitution: int
-    intelligence: int
-    wisdom: int
-    charisma: int
-
 class AbilityScores(BaseModel):
     strength: int = Field(None, description="Strength score")
     dexterity: int = Field(None, description="Dexterity score")
@@ -25,6 +16,6 @@ class AbilityScores(BaseModel):
 structured_llm = llm.with_structured_output(AbilityScores)
 
 # Invoke the augmented LLM
-output = structured_llm.invoke("A character that wins all combats: rank their abilities from most to least important using numbers 1 to 6.")
+output = structured_llm.invoke("I want to build a character that wins all combats. Assign a level of importance to each of their abilities. 1 is most important and 6 is least. For example: strength=4, dexterity=3, consitution=2, intelligence=6, wisdom=1, charisma=5.")
 
 print(output)
