@@ -1,8 +1,9 @@
 from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
+from langchain.tools import tool
 
-llm = ChatOllama(model="gpt-oss:20b")
+llm = ChatOllama(model="llama3.1")
 
 class AbilityScores(BaseModel):
     strength: int = Field(None, description="Strength score")
@@ -12,10 +13,24 @@ class AbilityScores(BaseModel):
     wisdom: int = Field(None, description="Wisdom score")
     charisma: int = Field(None, description="Charisma score")
 
-# Augment the LLM with schema for structured output
-structured_llm = llm.with_structured_output(AbilityScores)
+@tool
+def rate(stg: str, dex: str, con: str, inte: str, wis: str, cha: str) -> list[str]:
+    """Rate the importance of stg, dex, con, int, wis and cha.
+
+    Args:
+        stg: strength
+        dex: dexterity
+        con: constitution
+        int: intelligence
+        wis: wisdom
+        cha: charisma
+    """
+    decision = [stg, dex, con, inte, wis, cha]
+    print(decision)
+    return decision
+
+tools = [rate]
+llm_with_tools = llm.bind_tools(tools)
 
 # Invoke the augmented LLM
-output = structured_llm.invoke("I want to build a character that wins all combats. Assign a level of importance to each of their abilities. 1 is most important and 6 is least. For example: strength=4, dexterity=3, consitution=2, intelligence=6, wisdom=1, charisma=5.")
-
-print(output)
+output = llm_with_tools.invoke("Consider a character that excels at combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as high, medium or low.")
