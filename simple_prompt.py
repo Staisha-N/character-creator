@@ -4,12 +4,12 @@ from pydantic import BaseModel, Field
 llm = ChatOllama(model="llama3.2")
 
 class AbilityScores(BaseModel):
-    strength: str = Field(None, description="Strength score")
-    dexterity: str = Field(None, description="Dexterity score")
-    constitution: str = Field(None, description="Constitution score")
-    intelligence: str = Field(None, description="Intelligence score")
-    wisdom: str = Field(None, description="Wisdom score")
-    charisma: str = Field(None, description="Charisma score")
+    strength: str = Field("low", description="Strength score")
+    dexterity: str = Field("low", description="Dexterity score")
+    constitution: str = Field("low", description="Constitution score")
+    intelligence: str = Field("low", description="Intelligence score")
+    wisdom: str = Field("low", description="Wisdom score")
+    charisma: str = Field("low", description="Charisma score")
 
 # Augment the LLM with schema for structured output
 structured_llm = llm.with_structured_output(AbilityScores)
