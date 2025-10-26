@@ -72,11 +72,11 @@ def llm_call(state: MessagesState):
 
 def tool_node(state: dict):
     """Performs the tool call"""
-    tool_call = state["messages"][-1].tool_calls
-    tool = tools_by_name[tool_call["name"]]
-    observation = tool.invoke(tool_call["args"])
-    result = ToolMessage(content=observation)
-    print("Now inside tool_node and here is the result: ", result)
+    result = []
+    for tool_call in state["messages"][-1].tool_calls:
+        tool = tools_by_name[tool_call["name"]]
+        observation = tool.invoke(tool_call["args"])
+        result.append(ToolMessage(content=observation, tool_call_id=tool_call["id"]))
     return {"messages": result}
 
 agent_builder = StateGraph(MessagesState)
@@ -85,6 +85,7 @@ agent_builder.add_node("llm_call", llm_call)
 agent_builder.add_node("tool_node", tool_node)
 
 agent_builder.add_edge(START, "llm_call")
+agent_builder.add_edge("llm_call", "tool_node")
 agent_builder.add_edge("tool_node", END)
 
 agent = agent_builder.compile()
