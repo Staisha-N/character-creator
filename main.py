@@ -44,7 +44,9 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
         wis: wisdom
         cha: charisma
     """
-    return [1,2,3,4,5,6]
+    tool_result = [1,2,3,4,5,6]
+    print("Here are the results of the tool being called: ", tool_result)
+    return tool_result
 
 # Augment the LLM with tools
 tools = [quantitative_scores]
