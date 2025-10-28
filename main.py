@@ -44,6 +44,17 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
         wis: wisdom
         cha: charisma
     """
+    #initializing numeric ability scores
+    stg_score = 0
+    dex_score = 0
+    con_score = 0
+    inte_score = 0
+    wis_score = 0
+    cha_score = 0
+
+    if "high" in stg:
+        stg_score = 1
+
     tool_result = [1,2,3,4,5,6]
     print("Here are the results of the tool being called: ", tool_result)
     return tool_result
