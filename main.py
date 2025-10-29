@@ -44,17 +44,27 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
         wis: wisdom
         cha: charisma
     """
-    #initializing numeric ability scores
-    stg_score = 0
-    dex_score = 0
-    con_score = 0
-    inte_score = 0
-    wis_score = 0
-    cha_score = 0
 
-    if "high" in stg:
-        stg_score = 1
+    abilities_str = [stg, dex, con, inte, wis, cha]
+    abilities_int = [0, 0, 0, 0, 0, 0]
 
+    ability_count = 1
+
+    for index, ability in abilities_str:
+        if "high" in ability:
+            abilities_int[index] = ability_count + 1
+
+    for index, ability in abilities_str:
+        if "medium" in ability:
+            abilities_int[index] = ability_count + 1
+
+    for index, ability in abilities_str:
+        if "medium" not in ability and "high" not in ability:
+            abilities_int[index] = ability_count + 1
+
+    # Should result in somthing like tool_result, where the numbers appear
+    # only once, but can be in any order; showing priority of skills.
+    
     tool_result = [1,2,3,4,5,6]
     print("Here are the results of the tool being called: ", tool_result)
     return tool_result
