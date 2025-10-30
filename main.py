@@ -24,13 +24,18 @@ class AbilityScores(BaseModel):
     wisdom: str = Field("low", description="Wisdom score")
     charisma: str = Field("low", description="Charisma score")
 
-# Augment the LLM with schema for structured output
-structured_llm = llm.with_structured_output(AbilityScores)
+class CharacterBasics(BaseModel):
+    Race: str = Field("low", description="The race of the character. Must be one of the following options: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
+    Class: str = Field("low", description="The class of the character. Must be one of the following options: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
-# Invoke the augmented LLM
-output = structured_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as 'high', 'medium' or 'low'.")
+ability_llm = llm.with_structured_output(AbilityScores)
+ability_decision = ability_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as 'high', 'medium' or 'low'.")
 
-print(output)
+basics_llm = llm.with_structured_output(CharacterBasics)
+basics_decision = basics_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
+
+
+print(ability_decision)
 
 @tool
 def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str) -> list[int]:
@@ -64,7 +69,7 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
 
     # Should result in somthing like tool_result, where the numbers appear
     # only once, but can be in any order; showing priority of skills.
-    
+
     tool_result = [1,2,3,4,5,6]
     print("Here are the results of the tool being called: ", tool_result)
     return tool_result
