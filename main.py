@@ -31,10 +31,6 @@ class CharacterBasics(BaseModel):
 ability_llm = llm.with_structured_output(AbilityScores)
 ability_decision = ability_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as 'high', 'medium' or 'low'.")
 
-basics_llm = llm.with_structured_output(CharacterBasics)
-basics_decision = basics_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
-
-
 print(ability_decision)
 
 @tool
@@ -55,17 +51,20 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
 
     ability_count = 1
 
-    for index, ability in abilities_str:
+    for index, ability in enumerate(abilities_str):
         if "high" in ability:
             abilities_int[index] = ability_count + 1
+            ability_count += 1
 
-    for index, ability in abilities_str:
+    for index, ability in enumerate(abilities_str):
         if "medium" in ability:
             abilities_int[index] = ability_count + 1
+            ability_count += 1
 
-    for index, ability in abilities_str:
+    for index, ability in enumerate(abilities_str):
         if "medium" not in ability and "high" not in ability:
             abilities_int[index] = ability_count + 1
+            ability_count += 1
 
     # Should result in somthing like tool_result, where the numbers appear
     # only once, but can be in any order; showing priority of skills.
@@ -113,15 +112,24 @@ def tool_node(state: dict):
         observation = tool.invoke(tool_call["args"])
         result = [ToolMessage(content=observation, tool_call_id=tool_call["id"])]
         return {"messages": result}
+    
+def register_basics(state: dict):
+    basics_llm = llm.with_structured_output(CharacterBasics)
+    basics_decision = basics_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
+    print("Here are the basics: ", basics_decision)
 
 agent_builder = StateGraph(MessagesState)
 
 agent_builder.add_node("llm_call", llm_call)
 agent_builder.add_node("tool_node", tool_node)
+agent_builder.add_node("register_basics", register_basics)
 
 agent_builder.add_edge(START, "llm_call")
+#Add parallel execution for character basics (i.e. race, class)
+agent_builder.add_edge(START, "register_basics")
 agent_builder.add_edge("llm_call", "tool_node")
 agent_builder.add_edge("tool_node", END)
+agent_builder.add_edge("register_basics", END)
 
 agent = agent_builder.compile()
 
