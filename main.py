@@ -69,9 +69,8 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
     # Should result in somthing like tool_result, where the numbers appear
     # only once, but can be in any order; showing priority of skills.
 
-    tool_result = [1,2,3,4,5,6]
-    print("Here are the results of the tool being called: ", tool_result)
-    return tool_result
+    print("Here are the results of the tool being called: ", abilities_int)
+    return abilities_int
 
 # Augment the LLM with tools
 tools = [quantitative_scores]
