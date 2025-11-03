@@ -6,7 +6,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 
-llm = ChatOllama(model="llama3.2")
+llm = ChatOllama(model="llama3.1")
 
 # class State(TypedDict):
 #     strength: int
@@ -30,8 +30,8 @@ llm = ChatOllama(model="llama3.2")
 # print(ability_decision)
 
 class CharacterBasics(BaseModel):
-    Race: str = Field("low", description="The race of the character. Must be one of the following options: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
-    Class: str = Field("low", description="The class of the character. Must be one of the following options: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
+    Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
+    Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
 @tool
 def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str, weight: str) -> list[int]:
@@ -117,7 +117,7 @@ def tool_node(state: dict):
     
 def register_basics(state: dict):
     basics_llm = llm.with_structured_output(CharacterBasics)
-    basics_decision = basics_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
+    basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
     print("Here are the basics: ", basics_decision)
 
 agent_builder = StateGraph(MessagesState)
