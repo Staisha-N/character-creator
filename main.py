@@ -8,48 +8,51 @@ from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 
 llm = ChatOllama(model="llama3.2")
 
-class State(TypedDict):
-    strength: int
-    dexterity: int
-    constitution: int
-    intelligence: int
-    wisdom: int
-    charisma: int
+# class State(TypedDict):
+#     strength: int
+#     dexterity: int
+#     constitution: int
+#     intelligence: int
+#     wisdom: int
+#     charisma: int
 
-class AbilityScores(BaseModel):
-    strength: str = Field("low", description="Strength score")
-    dexterity: str = Field("low", description="Dexterity score")
-    constitution: str = Field("low", description="Constitution score")
-    intelligence: str = Field("low", description="Intelligence score")
-    wisdom: str = Field("low", description="Wisdom score")
-    charisma: str = Field("low", description="Charisma score")
+# class AbilityScores(BaseModel):
+#     strength: str = Field("low", description="Strength score")
+#     dexterity: str = Field("low", description="Dexterity score")
+#     constitution: str = Field("low", description="Constitution score")
+#     intelligence: str = Field("low", description="Intelligence score")
+#     wisdom: str = Field("low", description="Wisdom score")
+#     charisma: str = Field("low", description="Charisma score")
+
+# ability_llm = llm.with_structured_output(AbilityScores)
+# ability_decision = ability_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as 'high', 'medium' or 'low'.")
+
+# print(ability_decision)
 
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="The race of the character. Must be one of the following options: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
     Class: str = Field("low", description="The class of the character. Must be one of the following options: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
-ability_llm = llm.with_structured_output(AbilityScores)
-ability_decision = ability_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as 'high', 'medium' or 'low'.")
-
-print(ability_decision)
-
 @tool
-def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str) -> list[int]:
-    """Create quantitative scores for these abilities: stg, dex, con, int, wis and cha.
+def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str, weight: str) -> list[int]:
+    """Create quantitative scores for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, evenly or unevenly.
 
     Args:
-        stg: strength
-        dex: dexterity
-        con: constitution
-        int: intelligence
-        wis: wisdom
-        cha: charisma
+        stg: the character's strength rating; one of 'high', 'medium', or 'low'
+        dex: the character's dexterity rating; one of 'high', 'medium', or 'low'
+        con: the character's constitution rating; one of 'high', 'medium', or 'low'
+        int: the character's intelligence rating; one of 'high', 'medium', or 'low'
+        wis: the character's wisdom rating; one of 'high', 'medium', or 'low'
+        cha: the character's charisma rating; one of 'high', 'medium', or 'low'
+        weight: how the character's ability points should be distributed; either 'balanced' or 'focused'
     """
 
+    print("This is the weight: ", weight)
     abilities_str = [stg, dex, con, inte, wis, cha]
+    print("These are the ability inputs: ", abilities_str)
     abilities_int = [0, 0, 0, 0, 0, 0]
 
-    ability_count = 1
+    ability_count = 0
 
     for index, ability in enumerate(abilities_str):
         if "high" in ability:
