@@ -6,7 +6,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 
-llm = ChatOllama(model="llama3.1")
+llm = ChatOllama(model="llama3.2")
 
 # class State(TypedDict):
 #     strength: int
@@ -29,12 +29,24 @@ llm = ChatOllama(model="llama3.1")
 
 # print(ability_decision)
 
+class Ability():
+    def __init__(self, name, description, priority, points):
+        self.name = name
+        self.description = description
+        self.priority = priority
+        self.points = points
+    def set_priority(self, priority):
+        self.priority = priority
+    def set_points(self, points):
+        self.points = points
+
+
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
     Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
 @tool
-def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str, weight: str) -> list[int]:
+def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str, distribution: str) -> list[int]:
     """Create quantitative scores for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, evenly or unevenly.
 
     Args:
@@ -44,10 +56,10 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
         int: the character's intelligence rating; one of 'high', 'medium', or 'low'
         wis: the character's wisdom rating; one of 'high', 'medium', or 'low'
         cha: the character's charisma rating; one of 'high', 'medium', or 'low'
-        weight: how the character's ability points should be distributed; either 'balanced' or 'focused'
+        distribution: how the character's ability points should be distributed; either 'balanced' or 'focused'
     """
 
-    print("This is the weight: ", weight)
+    print("This is the weight: ", distribution)
     abilities_str = [stg, dex, con, inte, wis, cha]
     print("These are the ability inputs: ", abilities_str)
     abilities_int = [0, 0, 0, 0, 0, 0]
