@@ -30,15 +30,16 @@ llm = ChatOllama(model="llama3.2")
 # print(ability_decision)
 
 class Ability():
-    def __init__(self, name, description, priority, points):
-        self.name = name
+    def __init__(self, description, priority, points):
         self.description = description
         self.priority = priority
         self.points = points
-    def set_priority(self, priority):
-        self.priority = priority
+    def get_desc(self):
+        return self.description
     def set_points(self, points):
         self.points = points
+    def set_priority(self, priority):
+        self.priority = priority
 
 
 class CharacterBasics(BaseModel):
@@ -64,22 +65,38 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
     print("These are the ability inputs: ", abilities_str)
     abilities_int = [0, 0, 0, 0, 0, 0]
 
+    strength = Ability(str, 0, 8)
+    dexterity = Ability(dex, 0, 8)
+    constitution = Ability(con, 0, 8)
+    intelligence = Ability(inte, 0, 8)
+    wisdom = Ability(wis, 0, 8)
+    charisma = Ability(cha, 0, 8)
+
+    abilities = [strength, dexterity, constitution, intelligence, wisdom, charisma]
+
     ability_count = 0
 
-    for index, ability in enumerate(abilities_str):
-        if "high" in ability:
-            abilities_int[index] = ability_count + 1
+    for ability in abilities:
+        if "high" in ability.get_desc():
+            ability.set_priority(ability_count + 1) 
             ability_count += 1
 
-    for index, ability in enumerate(abilities_str):
-        if "medium" in ability:
-            abilities_int[index] = ability_count + 1
+    for ability in abilities:
+        if "medium" in ability.get_desc():
+            ability.set_priority(ability_count + 1) 
             ability_count += 1
 
-    for index, ability in enumerate(abilities_str):
-        if "medium" not in ability and "high" not in ability:
-            abilities_int[index] = ability_count + 1
+    for ability in abilities:
+        if "high" not in ability.get_desc() and "medium" not in ability.get_desc():
+            ability.set_priority(ability_count + 1) 
             ability_count += 1
+
+    # order the abilities array by priority, then increment the abilities one by one (if balanced)
+    # and check at each increment if we exceed the total point allowance.
+    # At the end, we will iterate over the abilities and translate the points to scores (+1, -1, etc.)
+
+    # For unbalanced, or 'focused' we start by min-maxing the "high" level skills, then move to medium, checking 
+    #the threshold at each time.
 
     # Should result in somthing like tool_result, where the numbers appear
     # only once, but can be in any order; showing priority of skills.
