@@ -95,6 +95,9 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
     # and check at each increment if we exceed the total point allowance.
     # At the end, we will iterate over the abilities and translate the points to scores (+1, -1, etc.)
 
+    if "balanced" not in distribution and "focused" not in distribution:
+        print("Error: distribution not balanced or focused")
+
     # For unbalanced, or 'focused' we start by min-maxing the "high" level skills, then move to medium, checking 
     #the threshold at each time.
 
