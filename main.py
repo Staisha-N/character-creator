@@ -36,6 +36,8 @@ class Ability():
         self.points = points
     def get_desc(self):
         return self.description
+    def get_priority(self):
+        return self.priority
     def set_points(self, points):
         self.points = points
     def set_priority(self, priority):
@@ -97,6 +99,8 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
 
     if "balanced" not in distribution and "focused" not in distribution:
         print("Error: distribution not balanced or focused")
+
+    sorted_abilities = sorted(abilities, key=lambda this_ability: this_ability.get_priority())
 
     # For unbalanced, or 'focused' we start by min-maxing the "high" level skills, then move to medium, checking 
     #the threshold at each time.
