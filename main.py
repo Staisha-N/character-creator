@@ -30,7 +30,8 @@ llm = ChatOllama(model="llama3.2")
 # print(ability_decision)
 
 class Ability():
-    def __init__(self, description, priority, points):
+    def __init__(self, name: str, description: str, priority: int, points: int):
+        self.name = name
         self.description = description
         self.priority = priority
         self.points = points
@@ -42,6 +43,8 @@ class Ability():
         self.points = points
     def set_priority(self, priority):
         self.priority = priority
+    def get_name(self):
+        return self.name
 
 
 class CharacterBasics(BaseModel):
@@ -65,14 +68,13 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
     print("This is the weight: ", distribution)
     abilities_str = [stg, dex, con, inte, wis, cha]
     print("These are the ability inputs: ", abilities_str)
-    abilities_int = [0, 0, 0, 0, 0, 0]
 
-    strength = Ability(str, 0, 8)
-    dexterity = Ability(dex, 0, 8)
-    constitution = Ability(con, 0, 8)
-    intelligence = Ability(inte, 0, 8)
-    wisdom = Ability(wis, 0, 8)
-    charisma = Ability(cha, 0, 8)
+    strength = Ability("strength", stg, 0, 8)
+    dexterity = Ability("dexterity", dex, 0, 8)
+    constitution = Ability("constitution", con, 0, 8)
+    intelligence = Ability("intelligence", inte, 0, 8)
+    wisdom = Ability("wisdom", wis, 0, 8)
+    charisma = Ability("chrisma", cha, 0, 8)
 
     abilities = [strength, dexterity, constitution, intelligence, wisdom, charisma]
 
@@ -102,14 +104,18 @@ def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: 
 
     sorted_abilities = sorted(abilities, key=lambda this_ability: this_ability.get_priority())
 
+    temp_index = 1
+    for ability in sorted_abilities:
+        print("My ", ability.name, " is number ", temp_index)
+        temp_index += 1
+
     # For unbalanced, or 'focused' we start by min-maxing the "high" level skills, then move to medium, checking 
     #the threshold at each time.
 
     # Should result in somthing like tool_result, where the numbers appear
     # only once, but can be in any order; showing priority of skills.
 
-    print("Here are the results of the tool being called: ", abilities_int)
-    return abilities_int
+    return [0,0,0,0,0,0]
 
 # Augment the LLM with tools
 tools = [quantitative_scores]
