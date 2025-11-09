@@ -23,7 +23,7 @@
             await pyodide.runPythonAsync(pythonCode);
 
             const userInput = document.getElementById("userInput").value;
-            let result = pyodide.runPython(`process_input("${userInput}")`);
+            let result = pyodide.runPython(`simple_script("${userInput}")`);
             document.getElementById("output").innerText = result;
         }
     </script>
