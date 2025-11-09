@@ -52,7 +52,7 @@ class CharacterBasics(BaseModel):
     Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
 @tool
-def quantitative_scores(stg: str, dex: str, con: str, inte: str, wis: str, cha: str, distribution: str) -> list[int]:
+def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "default", inte: str = "default", wis: str = "default", cha: str = "default", distribution: str = "default") -> list[int]:
     """Create quantitative scores for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, evenly or unevenly.
 
     Args:
