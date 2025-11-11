@@ -45,7 +45,14 @@ class Ability():
         self.priority = priority
     def get_name(self):
         return self.name
+    def add_point(self):
+        self.points = self.points + 1
 
+def total_points(abilities: list[Ability]) -> int:
+    total = 0
+    for ability in abilities:
+        total += ability.get_points
+    return total
 
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
@@ -108,6 +115,15 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
     for ability in sorted_abilities:
         print("My ", ability.name, " is number ", temp_index)
         temp_index += 1
+
+    if "balanced" in distribution:
+        
+        while total_points(sorted_abilities) < 75:
+            for ability in sorted_abilities:
+                ability.add_point()
+
+
+
 
     # For unbalanced, or 'focused' we start by min-maxing the "high" level skills, then move to medium, checking 
     #the threshold at each time.
