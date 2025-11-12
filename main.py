@@ -47,6 +47,8 @@ class Ability():
         return self.name
     def add_point(self):
         self.points = self.points + 1
+    def get_points(self):
+        return self.points
 
 def total_points(abilities: list[Ability]) -> int:
     total = 0
@@ -117,10 +119,17 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
         temp_index += 1
 
     if "balanced" in distribution:
-        
         while total_points(sorted_abilities) < 75:
             for ability in sorted_abilities:
+                ability.add_point() 
+    else: #focused distribution
+        for ability in sorted_abilities:
+            while ability.get_points() < 15 and total_points(sorted_abilities) < 75:
                 ability.add_point()
+            if total_points(sorted_abilities) >= 75:
+                break
+
+
 
 
 
