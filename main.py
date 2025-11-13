@@ -36,22 +36,22 @@ class Ability():
         self.priority = priority
         self.points = points
         self.ability_score = 0
+    def get_name(self):
+        return self.name
     def get_desc(self):
         return self.description
     def get_priority(self):
         return self.priority
-    def set_points(self, points):
-        self.points = points
-    def set_priority(self, priority):
-        self.priority = priority
-    def get_name(self):
-        return self.name
-    def add_point(self):
-        self.points = self.points + 1
     def get_points(self):
         return self.points
+    def set_priority(self, priority):
+        self.priority = priority
+    def set_points(self, points):
+        self.points = points
     def set_ability_score(self, score):
         self.ability_score = score
+    def add_point(self):
+        self.points = self.points + 1
 
 def total_points(abilities: list[Ability]) -> int:
     total = 0
