@@ -35,6 +35,7 @@ class Ability():
         self.description = description
         self.priority = priority
         self.points = points
+        self.ability_score = 0
     def get_desc(self):
         return self.description
     def get_priority(self):
@@ -49,6 +50,8 @@ class Ability():
         self.points = self.points + 1
     def get_points(self):
         return self.points
+    def set_ability_score(self, score):
+        self.ability_score = score
 
 def total_points(abilities: list[Ability]) -> int:
     total = 0
@@ -128,17 +131,6 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
                 ability.add_point()
             if total_points(sorted_abilities) >= 75:
                 break
-
-
-
-
-
-
-    # For unbalanced, or 'focused' we start by min-maxing the "high" level skills, then move to medium, checking 
-    #the threshold at each time.
-
-    # Should result in somthing like tool_result, where the numbers appear
-    # only once, but can be in any order; showing priority of skills.
 
     return [0,0,0,0,0,0]
 
