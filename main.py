@@ -15,6 +15,7 @@ class Ability():
         self.priority = priority
         self.points = points
         self.ability_score = 0
+        self.buy_penalty = 1
     def get_name(self):
         return self.name
     def get_desc(self):
@@ -23,6 +24,8 @@ class Ability():
         return self.priority
     def get_points(self):
         return self.points
+    def get_buy_penalty(self):
+        return self.buy_penalty
     def set_priority(self, priority):
         self.priority = priority
     def set_points(self, points):
@@ -31,6 +34,10 @@ class Ability():
         self.ability_score = score
     def add_point(self):
         self.points = self.points + 1
+    def update_buy_penalty(self):
+        if self.points >= 13:
+            self.buy_penalty = 2
+
 
 def total_points(abilities: list[Ability]) -> int:
     total = 0
@@ -101,6 +108,8 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
         print("My ", ability.name, " is number ", temp_index)
         temp_index += 1
 
+    point_allowance = 27
+
     if "balanced" in distribution:
         while total_points(sorted_abilities) < 75:
             for ability in sorted_abilities:
@@ -110,9 +119,14 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
                 ability.add_point() 
     else: #focused distribution
         for ability in sorted_abilities:
-            while ability.get_points() < 15 and total_points(sorted_abilities) < 75:
+            while ability.get_points() < 15 and point_allowance > 0:
                 ability.add_point()
-            if total_points(sorted_abilities) >= 75:
+                penalty = ability.get_buy_penalty()
+                print("We are on ", ability.name, " and penalty is now ", penalty)
+                point_allowance = point_allowance - penalty
+                print("We are on ", ability.name, " and allowance is now ", point_allowance)
+                ability.update_buy_penalty()
+            if point_allowance <= 0:
                 break
 
     for ability in sorted_abilities:
