@@ -8,27 +8,6 @@ from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 
 llm = ChatOllama(model="llama3.2")
 
-# class State(TypedDict):
-#     strength: int
-#     dexterity: int
-#     constitution: int
-#     intelligence: int
-#     wisdom: int
-#     charisma: int
-
-# class AbilityScores(BaseModel):
-#     strength: str = Field("low", description="Strength score")
-#     dexterity: str = Field("low", description="Dexterity score")
-#     constitution: str = Field("low", description="Constitution score")
-#     intelligence: str = Field("low", description="Intelligence score")
-#     wisdom: str = Field("low", description="Wisdom score")
-#     charisma: str = Field("low", description="Charisma score")
-
-# ability_llm = llm.with_structured_output(AbilityScores)
-# ability_decision = ability_llm.invoke("Consider a Dungeons and Dragons character that excels at physical combat. Rate the importance its six abilities (strength, dexterity, constitution, wisdom, intelligence and charisma) as 'high', 'medium' or 'low'.")
-
-# print(ability_decision)
-
 class Ability():
     def __init__(self, name: str, description: str, priority: int, points: int):
         self.name = name
@@ -56,7 +35,8 @@ class Ability():
 def total_points(abilities: list[Ability]) -> int:
     total = 0
     for ability in abilities:
-        total += ability.get_points
+        curr_points = ability.get_points()
+        total += curr_points
     return total
 
 class CharacterBasics(BaseModel):
@@ -68,12 +48,12 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
     """Create quantitative scores for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, evenly or unevenly.
 
     Args:
-        stg: the character's strength rating; one of 'high', 'medium', or 'low'
-        dex: the character's dexterity rating; one of 'high', 'medium', or 'low'
-        con: the character's constitution rating; one of 'high', 'medium', or 'low'
-        int: the character's intelligence rating; one of 'high', 'medium', or 'low'
-        wis: the character's wisdom rating; one of 'high', 'medium', or 'low'
-        cha: the character's charisma rating; one of 'high', 'medium', or 'low'
+        stg: the character's strength rating; either 'high', 'medium', or 'low'
+        dex: the character's dexterity rating; either 'high', 'medium', or 'low'
+        con: the character's constitution rating; either 'high', 'medium', or 'low'
+        int: the character's intelligence rating; either 'high', 'medium', or 'low'
+        wis: the character's wisdom rating; either 'high', 'medium', or 'low'
+        cha: the character's charisma rating; either 'high', 'medium', or 'low'
         distribution: how the character's ability points should be distributed; either 'balanced' or 'focused'
     """
 
@@ -124,6 +104,9 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
     if "balanced" in distribution:
         while total_points(sorted_abilities) < 75:
             for ability in sorted_abilities:
+                print("Total points now: ", total_points(sorted_abilities))
+                if total_points(sorted_abilities) >= 75:
+                    break
                 ability.add_point() 
     else: #focused distribution
         for ability in sorted_abilities:
@@ -131,6 +114,10 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
                 ability.add_point()
             if total_points(sorted_abilities) >= 75:
                 break
+
+    for ability in sorted_abilities:
+        this_point = ability.get_points()
+        print(ability.name, " has this many points: ", this_point)
 
     return [0,0,0,0,0,0]
 
