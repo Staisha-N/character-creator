@@ -111,20 +111,20 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
     point_allowance = 27
 
     if "balanced" in distribution:
-        while total_points(sorted_abilities) < 75:
+        while point_allowance > 0:
             for ability in sorted_abilities:
-                print("Total points now: ", total_points(sorted_abilities))
-                if total_points(sorted_abilities) >= 75:
+                if point_allowance <= 0:
                     break
-                ability.add_point() 
+                ability.add_point()
+                penalty = ability.get_buy_penalty()
+                point_allowance = point_allowance - penalty
+                ability.update_buy_penalty()
     else: #focused distribution
         for ability in sorted_abilities:
             while ability.get_points() < 15 and point_allowance > 0:
                 ability.add_point()
                 penalty = ability.get_buy_penalty()
-                print("We are on ", ability.name, " and penalty is now ", penalty)
                 point_allowance = point_allowance - penalty
-                print("We are on ", ability.name, " and allowance is now ", point_allowance)
                 ability.update_buy_penalty()
             if point_allowance <= 0:
                 break
