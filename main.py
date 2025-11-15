@@ -14,7 +14,7 @@ class Ability():
         self.description = description
         self.priority = priority
         self.points = points
-        self.ability_score = 0
+        self.modifier = 0
         self.buy_penalty = 1
     def get_name(self):
         return self.name
@@ -30,8 +30,8 @@ class Ability():
         self.priority = priority
     def set_points(self, points):
         self.points = points
-    def set_ability_score(self, score):
-        self.ability_score = score
+    def set_modifier(self, modifier):
+        self.modifier = modifier
     def add_point(self):
         self.points = self.points + 1
     def update_buy_penalty(self):
@@ -45,6 +45,22 @@ def total_points(abilities: list[Ability]) -> int:
         curr_points = ability.get_points()
         total += curr_points
     return total
+
+def set_modifiers(abilities: list[Ability]) -> list[Ability]:
+    modifier = 0
+    for ability in abilities:
+        points = ability.get_points()
+        if points == 8 or points == 9:
+            modifier = -1
+        elif points == 10 or points == 11:
+            modifier = 0
+        elif points == 12 or points == 13:
+            modifier = 1
+        else:
+            modifier = 2
+        ability.set_modifier(modifier)
+        
+    return abilities
 
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
@@ -132,6 +148,8 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
     for ability in sorted_abilities:
         this_point = ability.get_points()
         print(ability.name, " has this many points: ", this_point)
+
+    sorted_abilities = set_modifiers(sorted_abilities)
 
     return [0,0,0,0,0,0]
 
