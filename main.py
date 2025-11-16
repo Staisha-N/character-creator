@@ -5,6 +5,7 @@ from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
+from langgraph.prebuilt import ToolNode
 
 llm = ChatOllama(model="llama3.2")
 
@@ -67,8 +68,8 @@ class CharacterBasics(BaseModel):
     Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
 @tool
-def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "default", inte: str = "default", wis: str = "default", cha: str = "default", distribution: str = "default") -> list[int]:
-    """Create quantitative scores for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, evenly or unevenly.
+def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "default", inte: str = "default", wis: str = "default", cha: str = "default", distribution: str = "default") -> list[int]:
+    """Choose modifiers for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, either 'balanced' or 'focused'.
 
     Args:
         stg: the character's strength rating; either 'high', 'medium', or 'low'
@@ -153,67 +154,35 @@ def quantitative_scores(stg: str = "default", dex: str = "default", con: str = "
 
     return [0,0,0,0,0,0]
 
-# Augment the LLM with tools
-tools = [quantitative_scores]
-llm_with_tools = llm.bind_tools([quantitative_scores])
-tools_by_name = {tool.name: tool for tool in tools}
 
-
+llm_with_tools = llm.bind_tools([choose_modifiers])
 
 def llm_call(state: MessagesState):
-    """LLM decides whether to call a tool or not"""
+    """Calls tool"""
 
-    return {
-        "messages": [
-            llm_with_tools.invoke(
-                [
-                    SystemMessage(
-                        content="You are a helpful assistant. Your input is a qualitative description of a characters' abilities and you must call a tool to get corresponding quantitative ability scores."
-                    )
-                ]
-                + state["messages"]
-            )
-        ]
-    }
-
-
-def tool_node(state: dict):
-    """Performs the tool call"""
-
-    tool_calls = state["messages"][-1].tool_calls
-    if not tool_calls:
-        observation = "Err: no tool calls made"
-        print(observation)
-        result = [ToolMessage(content=observation, tool_call_id=tool_call["id"])]
-        return {"messages": result}
-    else:
-        tool_call = tool_calls[0]    
-        tool = tools_by_name[tool_call["name"]]
-        observation = tool.invoke(tool_call["args"])
-        result = [ToolMessage(content=observation, tool_call_id=tool_call["id"])]
-        return {"messages": result}
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
     
-def register_basics(state: dict):
-    basics_llm = llm.with_structured_output(CharacterBasics)
-    basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
-    print("Here are the basics: ", basics_decision)
+# def register_basics(state: dict):
+#     basics_llm = llm.with_structured_output(CharacterBasics)
+#     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
+#     print("Here are the basics: ", basics_decision)
+
+tool_node = ToolNode([choose_modifiers])
 
 agent_builder = StateGraph(MessagesState)
 
 agent_builder.add_node("llm_call", llm_call)
-agent_builder.add_node("tool_node", tool_node)
-agent_builder.add_node("register_basics", register_basics)
+agent_builder.add_node("tools", tool_node)
+#agent_builder.add_node("register_basics", register_basics)
 
 agent_builder.add_edge(START, "llm_call")
 #Add parallel execution for character basics (i.e. race, class)
-agent_builder.add_edge(START, "register_basics")
-agent_builder.add_edge("llm_call", "tool_node")
-agent_builder.add_edge("tool_node", END)
-agent_builder.add_edge("register_basics", END)
+#agent_builder.add_edge(START, "register_basics")
+agent_builder.add_edge("llm_call", "tools")
+agent_builder.add_edge("tools", END)
+#agent_builder.add_edge("register_basics", END)
 
 agent = agent_builder.compile()
 
-messages = [HumanMessage(content="strength='low' dexterity='high' constitution='high' intelligence='low' wisdom='medium' charisma='medium'")]
-messages = agent.invoke({"messages": messages})
-for m in messages["messages"]:
-    m.pretty_print()
+result = agent.invoke({"messages": [{"role": "user", "content": "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."}]})
+print(result["messages"][-1].content)
