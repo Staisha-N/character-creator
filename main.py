@@ -9,6 +9,33 @@ from langgraph.prebuilt import ToolNode
 
 llm = ChatOllama(model="llama3.2")
 
+#Only point buy and race affect the character's scores
+#The idea here would be to have two llm functions both modify the one Character object
+#The first will be in the tool for the point buy and the second will be in a second function 
+#that will determine the race, and do point calculations for race. Both will modify character object.
+#Then we call the aggregation function to combine them.
+
+class Scores():
+    def __init__(self, stg, dex, con, inte, wis, cha):
+        self.stg = 0
+        self.dex = 0
+        self.con = 0
+        self.inte = 0
+        self.wis = 0
+        self.cha = 0
+    def set_scores(self, stg, dex, con, inte, wis, cha):
+        self.stg = stg
+        self.dex = dex
+        self.con = con
+        self.inte = inte
+        self.wis = wis
+        self.cha = cha
+
+class Character():
+    def __init__(self, pb_scores: Scores, race_scores: Scores):
+        self.pb_scores = pb_scores
+        self.race_scores = race_scores
+
 class Ability():
     def __init__(self, name: str, description: str, priority: int, points: int):
         self.name = name
