@@ -16,36 +16,34 @@ llm = ChatOllama(model="llama3.2")
 #Then we call the aggregation function to combine them.
 
 class Scores():
-    def __init__(self, stg, dex, con, inte, wis, cha):
-        self.stg = 0
-        self.dex = 0
-        self.con = 0
-        self.inte = 0
-        self.wis = 0
-        self.cha = 0
-    def set_scores(self, stg, dex, con, inte, wis, cha):
-        self.stg = stg
-        self.dex = dex
-        self.con = con
-        self.inte = inte
-        self.wis = wis
-        self.cha = cha
+    def __init__(self, scores: list[int]):
+        self.stg = scores[0]
+        self.dex = scores[1]
+        self.con = scores[2]
+        self.inte = scores[3]
+        self.wis = scores[4]
+        self.cha = scores[5]
 
 class Character():
-    def __init__(self, pb_scores: Scores, race_scores: Scores):
+    def __init__(self):
+        self.pb_scores = None
+        self.race_scores = None
+    def set_pb_scores(self, pb_scores: Scores):
         self.pb_scores = pb_scores
+    def set_race_scores(self, race_scores: Scores):
         self.race_scores = race_scores
+    
 
 class Ability():
-    def __init__(self, name: str, description: str, priority: int, points: int):
-        self.name = name
+    def __init__(self, ID: int, description: str, priority: int, points: int):
+        self.ID = ID
         self.description = description
         self.priority = priority
         self.points = points
         self.modifier = 0
         self.buy_penalty = 1
-    def get_name(self):
-        return self.name
+    def get_ID(self):
+        return self.ID
     def get_desc(self):
         return self.description
     def get_priority(self):
@@ -90,6 +88,8 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
         
     return abilities
 
+myCharacter = Character()
+
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
     Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
@@ -112,12 +112,12 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
     abilities_str = [stg, dex, con, inte, wis, cha]
     print("These are the ability inputs: ", abilities_str)
 
-    strength = Ability("strength", stg, 0, 8)
-    dexterity = Ability("dexterity", dex, 0, 8)
-    constitution = Ability("constitution", con, 0, 8)
-    intelligence = Ability("intelligence", inte, 0, 8)
-    wisdom = Ability("wisdom", wis, 0, 8)
-    charisma = Ability("chrisma", cha, 0, 8)
+    strength = Ability(1, stg, 0, 8)
+    dexterity = Ability(2, dex, 0, 8)
+    constitution = Ability(3, con, 0, 8)
+    intelligence = Ability(4, inte, 0, 8)
+    wisdom = Ability(5, wis, 0, 8)
+    charisma = Ability(6, cha, 0, 8)
 
     abilities = [strength, dexterity, constitution, intelligence, wisdom, charisma]
 
@@ -149,7 +149,7 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
 
     temp_index = 1
     for ability in sorted_abilities:
-        print("My ", ability.name, " is number ", temp_index)
+        print("My ", ability.ID, " is number ", temp_index)
         temp_index += 1
 
     point_allowance = 27
@@ -175,9 +175,22 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
 
     for ability in sorted_abilities:
         this_point = ability.get_points()
-        print(ability.name, " has this many points: ", this_point)
+        print(ability.ID, " has this many points: ", this_point)
 
-    sorted_abilities = set_modifiers(sorted_abilities)
+    sorted_abilities_by_ID = sorted(sorted_abilities, key=lambda this_ability: this_ability.get_ID())
+
+    for ability in sorted_abilities_by_ID:
+        print("ID=", ability.ID)
+
+    final_scores = []
+    for i in range(6):
+        final_scores.append(sorted_abilities_by_ID[i].get_points())
+
+    print("Final scores: ",final_scores)
+    
+    pb_scores = Scores(final_scores)
+    myCharacter.set_pb_scores(pb_scores)
+
 
     return [0,0,0,0,0,0]
 
