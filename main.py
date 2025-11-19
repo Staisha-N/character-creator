@@ -192,37 +192,86 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
     myCharacter.set_pb_scores(pb_scores)
 
 
-    return [0,0,0,0,0,0]
-
-
-llm_with_tools = llm.bind_tools([choose_modifiers])
-
-def llm_call(state: MessagesState):
-    """Calls tool"""
-
-    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+    return final_scores
     
 # def register_basics(state: dict):
 #     basics_llm = llm.with_structured_output(CharacterBasics)
 #     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
 #     print("Here are the basics: ", basics_decision)
 
-tool_node = ToolNode([choose_modifiers])
+tools = [choose_modifiers]
+tools_by_name = {tool.name: tool for tool in tools}
+llm_with_tools = llm.bind_tools(tools)
 
+from langgraph.graph import MessagesState
+from langchain.messages import SystemMessage, HumanMessage, ToolMessage
+
+
+# Nodes
+def llm_call(state: MessagesState):
+    """LLM decides whether to call a tool or not"""
+
+    return {
+        "messages": [
+            llm_with_tools.invoke(
+                [
+                    SystemMessage(
+                        content="You are a helpful assistant tasked with helping with Dungeons and Dragons score calculations."
+                    )
+                ]
+                + state["messages"]
+            )
+        ]
+    }
+
+
+def tool_node(state: dict):
+    """Performs the tool call"""
+
+    result = []
+    for tool_call in state["messages"][-1].tool_calls:
+        tool = tools_by_name[tool_call["name"]]
+        observation = tool.invoke(tool_call["args"])
+        result.append(ToolMessage(content=observation, tool_call_id=tool_call["id"]))
+    return {"messages": result} #Stop here and add these two results to global class
+
+
+# Conditional edge function to route to the tool node or end based upon whether the LLM made a tool call
+def should_continue(state: MessagesState):
+    """Decide if we should continue the loop or stop based upon whether the LLM made a tool call"""
+
+    messages = state["messages"]
+    last_message = messages[-1]
+
+    # If the LLM makes a tool call, then perform an action
+    if last_message.tool_calls:
+        return "tool_node"
+
+    # Otherwise, we stop (reply to the user)
+    return END
+
+
+# Build workflow
 agent_builder = StateGraph(MessagesState)
 
+# Add nodes
 agent_builder.add_node("llm_call", llm_call)
-agent_builder.add_node("tools", tool_node)
-#agent_builder.add_node("register_basics", register_basics)
+agent_builder.add_node("tool_node", tool_node)
 
+# Add edges to connect nodes
 agent_builder.add_edge(START, "llm_call")
-#Add parallel execution for character basics (i.e. race, class)
-#agent_builder.add_edge(START, "register_basics")
-agent_builder.add_edge("llm_call", "tools")
-agent_builder.add_edge("tools", END)
-#agent_builder.add_edge("register_basics", END)
+agent_builder.add_conditional_edges(
+    "llm_call",
+    should_continue,
+    ["tool_node", END]
+)
+agent_builder.add_edge("tool_node", "llm_call")
 
+# Compile the agent
 agent = agent_builder.compile()
 
-result = agent.invoke({"messages": [{"role": "user", "content": "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."}]})
-print(result["messages"][-1].content)
+# Invoke
+messages = [HumanMessage(content="Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers.")]
+messages = agent.invoke({"messages": messages})
+for m in messages["messages"]:
+    m.pretty_print()
