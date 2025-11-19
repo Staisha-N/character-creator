@@ -1,11 +1,9 @@
 from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 from langchain.tools import tool
-from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
-from langgraph.prebuilt import ToolNode
 
 llm = ChatOllama(model="llama3.2")
 
@@ -202,10 +200,6 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
 tools = [choose_modifiers]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
-
-from langgraph.graph import MessagesState
-from langchain.messages import SystemMessage, HumanMessage, ToolMessage
-
 
 # Nodes
 def llm_call(state: MessagesState):
