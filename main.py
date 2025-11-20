@@ -93,8 +93,8 @@ class CharacterBasics(BaseModel):
     Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
 @tool
-def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "default", inte: str = "default", wis: str = "default", cha: str = "default", distribution: str = "default") -> list[int]:
-    """Choose modifiers for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, either 'balanced' or 'focused'.
+def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = "default", inte: str = "default", wis: str = "default", cha: str = "default", distribution: str = "default") -> list[int]:
+    """Choose descriptions for these abilities: strength, dexterity, constitution, intelligence, wisdom and charisma. Also define how the ability points should be spread, either 'balanced' or 'focused'.
 
     Args:
         stg: the character's strength rating; either 'high', 'medium', or 'low'
@@ -189,6 +189,22 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
     pb_scores = Scores(final_scores)
     myCharacter.set_pb_scores(pb_scores)
 
+    return final_scores
+
+@tool
+def point_buy_calculator(race: str = "default", subrace: str = "default") -> list[int]:
+    """Choose a race and subrace
+
+    Args:
+        race: the character's race; either Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling
+        subrace: the character's subrace if applicable.
+    """
+
+    print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
+
+    final_scores = [0,0,0,0,0,0]
+    race_scores = Scores(final_scores)
+    myCharacter.set_race_scores(race_scores)
 
     return final_scores
     
@@ -197,7 +213,7 @@ def choose_modifiers(stg: str = "default", dex: str = "default", con: str = "def
 #     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
 #     print("Here are the basics: ", basics_decision)
 
-tools = [choose_modifiers]
+tools = [point_buy_calculator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
 
@@ -269,3 +285,8 @@ messages = [HumanMessage(content="Consider a strong Dungeons and Dragons charact
 messages = agent.invoke({"messages": messages})
 for m in messages["messages"]:
     m.pretty_print()
+
+
+#For next commit, the plan is to use another tool to calculate race, then use another tool to aggregate.
+#We can modify the myCharacter object during the tool execution also
+#Also, we can try again with having a custom state where we can store more things than just the messages
