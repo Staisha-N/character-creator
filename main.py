@@ -192,13 +192,19 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
     return final_scores
 
 @tool
-def point_buy_calculator(race: str = "default", subrace: str = "default") -> list[int]:
+def race_calculator(race: str = "default", subrace: str = "default") -> list[int]:
     """Choose a race and subrace
 
     Args:
         race: the character's race; either Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling
-        subrace: the character's subrace if applicable.
+        subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
+    
+    # Dwarf: Hill Dwarf or Mountain Dwarf 
+    # Elf: High Elf or Wood Elf
+    # Halfling: Lightfoot Halfling or Stout Halfling 
+    # Gnome: Forest Gnome or Rock Gnome
+
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
@@ -213,7 +219,7 @@ def point_buy_calculator(race: str = "default", subrace: str = "default") -> lis
 #     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
 #     print("Here are the basics: ", basics_decision)
 
-tools = [point_buy_calculator]
+tools = [point_buy_calculator, race_calculator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
 
@@ -226,7 +232,7 @@ def llm_call(state: MessagesState):
             llm_with_tools.invoke(
                 [
                     SystemMessage(
-                        content="You are a helpful assistant tasked with helping with Dungeons and Dragons score calculations."
+                        content="You are a helpful assistant tasked with helping with Dungeons and Dragons characters. Call the point buy tool. Call the race and subrace tool."
                     )
                 ]
                 + state["messages"]
