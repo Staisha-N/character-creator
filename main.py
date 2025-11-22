@@ -22,7 +22,7 @@ class Scores():
         self.wis = scores[4]
         self.cha = scores[5]
 
-class Character():
+class CharacterBuilder():
     def __init__(self):
         self.pb_scores = None
         self.race_scores = None
@@ -86,7 +86,7 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
         
     return abilities
 
-myCharacter = Character()
+myCharacter = CharacterBuilder()
 
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
@@ -205,6 +205,19 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     # Halfling: Lightfoot Halfling or Stout Halfling 
     # Gnome: Forest Gnome or Rock Gnome
 
+    strength = 0
+    dexterity = 0
+    constitution = 0
+    intelligence = 0
+    wisdom = 0
+    charisma = 0
+
+    if "Dwarf" in race:
+        constitution += 2
+        if "Hill" in subrace:
+            wisdom += 1
+        else: #Mountain Dwarf
+            strength += 2
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
