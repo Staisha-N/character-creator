@@ -240,6 +240,12 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     elif "Dragonborn" in race:
         strength += 2
         charisma += 1
+    elif "Gnome" in race:
+        intelligence += 2
+        if "Rock" in subrace:
+            constitution += 1
+        else: #Forest gnome
+            dexterity += 1
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
