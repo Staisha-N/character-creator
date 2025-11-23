@@ -237,6 +237,9 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         intelligence += 1
         wisdom += 1
         charisma += 1
+    elif "Dragonborn" in race:
+        strength += 2
+        charisma += 1
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
