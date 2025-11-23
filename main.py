@@ -224,6 +224,12 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
             intelligence += 1
         else: #Wood Elf
             wisdom += 1
+    elif "Halfling" in race:
+        dexterity += 2
+        if "Lightfoot" in subrace:
+            charisma += 1
+        else: #Stout Halfling
+            constitution += 1
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
