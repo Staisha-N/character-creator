@@ -246,6 +246,18 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
             constitution += 1
         else: #Forest gnome
             dexterity += 1
+    elif "Half-Elf" in race:
+        charisma += 2
+        dexterity += 1
+        wisdom += 1
+    elif "Half-Orc" in race:
+        strength += 2
+        constitution += 1
+    elif "Tiefling" in race:
+        intelligence += 1
+        charisma += 2
+    else:
+        print("ERROR: Identified a race outside of the options.")
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
