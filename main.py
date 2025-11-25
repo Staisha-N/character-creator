@@ -200,17 +200,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
     
-    # Dwarf: Hill Dwarf or Mountain Dwarf 
-    # Elf: High Elf or Wood Elf
-    # Halfling: Lightfoot Halfling or Stout Halfling 
-    # Gnome: Forest Gnome or Rock Gnome
-
-    strength = 0
-    dexterity = 0
-    constitution = 0
-    intelligence = 0
-    wisdom = 0
-    charisma = 0
+    strength = dexterity = constitution = intelligence = wisdom = charisma = 0
 
     if "Dwarf" in race:
         constitution += 2
@@ -261,7 +251,8 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
-    final_scores = [0,0,0,0,0,0]
+    final_scores = [strength, dexterity, constitution, intelligence, wisdom, charisma]
+    print("Here are the scores: ", final_scores)
     race_scores = Scores(final_scores)
     myCharacter.set_race_scores(race_scores)
 
@@ -285,7 +276,14 @@ def llm_call(state: MessagesState):
             llm_with_tools.invoke(
                 [
                     SystemMessage(
-                        content="You are a helpful assistant tasked with helping with Dungeons and Dragons characters. Call the point buy tool. Call the race and subrace tool."
+                        content=(
+                            "You are a helpful assistant that must ALWAYS call exactly two tools, "
+                            "in this order: "
+                            "1) point_buy_calculator "
+                            "2) race_calculator "
+                            "Do not provide a final answer until BOTH tool calls have been made. "
+                            "If the user asks for a character build, always plan on calling both tools."
+                        )
                     )
                 ]
                 + state["messages"]
