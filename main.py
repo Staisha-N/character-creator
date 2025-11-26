@@ -30,6 +30,16 @@ class CharacterBuilder():
         self.pb_scores = pb_scores
     def set_race_scores(self, race_scores: Scores):
         self.race_scores = race_scores
+    def get_pb_scores(self):
+        return self.pb_scores
+    def get_race_scores(self):
+        return self.race_scores
+
+class FinalCharacter():
+    def __init__(self):
+        self.final_scores = None
+    def set_final_scores(self, final_scores: Scores):
+        self.final_scores = final_scores
     
 
 class Ability():
@@ -258,6 +268,12 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
 
     return final_scores
     
+
+def aggregator():
+    pb_scores = myCharacter.get_pb_scores()
+    race_scores = myCharacter.get_race_scores()
+
+
 # def register_basics(state: dict):
 #     basics_llm = llm.with_structured_output(CharacterBasics)
 #     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
