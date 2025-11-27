@@ -267,6 +267,8 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     race_scores = Scores(final_scores)
     myCharacterBuilder.set_race_scores(race_scores)
 
+    aggregator()
+
     return final_scores
     
 
@@ -284,7 +286,10 @@ def aggregator():
     combined_scores.append(pb_scores.wis + race_scores.wis)
     combined_scores.append(pb_scores.cha + race_scores.cha)
 
-    Character.set_final_scores(combined_scores)
+    print("Here are the combined scores: ", combined_scores)
+
+    scores = Scores(combined_scores)
+    myCharacter.set_final_scores(scores)
 
 # def register_basics(state: dict):
 #     basics_llm = llm.with_structured_output(CharacterBasics)
