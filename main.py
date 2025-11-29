@@ -38,8 +38,11 @@ class CharacterBuilder():
 class Character():
     def __init__(self):
         self.final_scores = None
+        self.walking_speed = None
     def set_final_scores(self, final_scores: Scores):
         self.final_scores = final_scores
+    def set_walking_speed(self, speed: int):
+        self.walking_speed = speed
     
 
 class Ability():
