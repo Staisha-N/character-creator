@@ -34,6 +34,22 @@ class CharacterBuilder():
         return self.pb_scores
     def get_race_scores(self):
         return self.race_scores
+    
+class Race():
+    def __init__(self):
+        self.scores = None
+        self.speed = None
+        self.darkvision = None
+        self.tool_proficiencies = None
+        self.language = None
+        self.subrace = None    
+    def set(self, scores: Scores, speed: int, darkvision: int, tool_proficiencies: list[str], language: list[str], subrace: str):
+        self.scores = scores
+        self.speed = speed
+        self.darkvision = darkvision
+        self.tool_proficiencies = tool_proficiencies
+        self.language = language
+        self.subrace = subrace
 
 class Character():
     def __init__(self):
@@ -100,6 +116,8 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
     return abilities
 
 myCharacterBuilder = CharacterBuilder()
+myRace = Race()
+
 myCharacter = Character()
 
 class CharacterBasics(BaseModel):
