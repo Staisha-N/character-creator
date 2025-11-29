@@ -272,9 +272,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     return final_scores
     
 
-def aggregator():
-    strength = dexterity = constitution = intelligence = wisdom = charisma = 0
-    
+def aggregator(): 
     pb_scores = myCharacterBuilder.get_pb_scores()
     race_scores = myCharacterBuilder.get_race_scores()
 
