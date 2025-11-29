@@ -22,18 +22,13 @@ class Scores():
         self.wis = scores[4]
         self.cha = scores[5]
 
-class CharacterBuilder():
+class PointBuy():
     def __init__(self):
         self.pb_scores = None
-        self.race_scores = None
     def set_pb_scores(self, pb_scores: Scores):
         self.pb_scores = pb_scores
-    def set_race_scores(self, race_scores: Scores):
-        self.race_scores = race_scores
     def get_pb_scores(self):
         return self.pb_scores
-    def get_race_scores(self):
-        return self.race_scores
     
 class Race():
     def __init__(self):
@@ -115,9 +110,8 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
         
     return abilities
 
-myCharacterBuilder = CharacterBuilder()
+myPointBuy = PointBuy()
 myRace = Race()
-
 myCharacter = Character()
 
 class CharacterBasics(BaseModel):
@@ -219,7 +213,7 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
     print("Final scores: ",final_scores)
     
     pb_scores = Scores(final_scores)
-    myCharacterBuilder.set_pb_scores(pb_scores)
+    myPointBuy.set_pb_scores(pb_scores)
 
     return final_scores
 
@@ -286,29 +280,29 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     final_scores = [strength, dexterity, constitution, intelligence, wisdom, charisma]
     print("Here are the scores: ", final_scores)
     race_scores = Scores(final_scores)
-    myCharacterBuilder.set_race_scores(race_scores)
+    #myRace.set_race_scores(race_scores)
 
-    aggregator()
+    #aggregator()
 
     return final_scores
     
 
-def aggregator(): 
-    pb_scores = myCharacterBuilder.get_pb_scores()
-    race_scores = myCharacterBuilder.get_race_scores()
+# def aggregator(): 
+#     pb_scores = myCharacterBuilder.get_pb_scores()
+#     race_scores = myCharacterBuilder.get_race_scores()
 
-    combined_scores = []
-    combined_scores.append(pb_scores.stg + race_scores.stg)
-    combined_scores.append(pb_scores.dex + race_scores.dex)
-    combined_scores.append(pb_scores.con + race_scores.con)
-    combined_scores.append(pb_scores.inte + race_scores.inte)
-    combined_scores.append(pb_scores.wis + race_scores.wis)
-    combined_scores.append(pb_scores.cha + race_scores.cha)
+#     combined_scores = []
+#     combined_scores.append(pb_scores.stg + race_scores.stg)
+#     combined_scores.append(pb_scores.dex + race_scores.dex)
+#     combined_scores.append(pb_scores.con + race_scores.con)
+#     combined_scores.append(pb_scores.inte + race_scores.inte)
+#     combined_scores.append(pb_scores.wis + race_scores.wis)
+#     combined_scores.append(pb_scores.cha + race_scores.cha)
 
-    print("Here are the combined scores: ", combined_scores)
+#     print("Here are the combined scores: ", combined_scores)
 
-    scores = Scores(combined_scores)
-    myCharacter.set_final_scores(scores)
+#     scores = Scores(combined_scores)
+#     myCharacter.set_final_scores(scores)
 
 # def register_basics(state: dict):
 #     basics_llm = llm.with_structured_output(CharacterBasics)
