@@ -39,7 +39,7 @@ class Race():
         self.language = None
         self.race = None
         self.subrace = None    
-    def set(self, scores: Scores, speed: int, darkvision: int, tool_proficiencies: list[str], language: list[str], race: str, subrace: str):
+    def set(self, scores: Scores, speed: int, darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str):
         self.scores = scores
         self.speed = speed
         self.darkvision = darkvision
@@ -228,27 +228,33 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
     
-    strength = dexterity = constitution = intelligence = wisdom = charisma = 0
+    strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = 0
+    tools = languages = []
 
     if "Dwarf" in race:
         constitution += 2
+        speed = 25
         if "Hill" in subrace:
             wisdom += 1
         else: #Mountain Dwarf
             strength += 2
     elif "Elf" in race:
+        speed = 30
         dexterity += 2
         if "High" in subrace:
             intelligence += 1
         else: #Wood Elf
             wisdom += 1
+            speed = 35
     elif "Halfling" in race:
+        speed = 25
         dexterity += 2
         if "Lightfoot" in subrace:
             charisma += 1
         else: #Stout Halfling
             constitution += 1
     elif "Human" in race:
+        speed = 30
         strength += 1
         dexterity += 1
         constitution += 1
@@ -256,22 +262,27 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         wisdom += 1
         charisma += 1
     elif "Dragonborn" in race:
+        speed = 30
         strength += 2
         charisma += 1
     elif "Gnome" in race:
+        speed = 25
         intelligence += 2
         if "Rock" in subrace:
             constitution += 1
         else: #Forest gnome
             dexterity += 1
     elif "Half-Elf" in race:
+        speed = 30
         charisma += 2
         dexterity += 1
         wisdom += 1
     elif "Half-Orc" in race:
+        speed = 30
         strength += 2
         constitution += 1
     elif "Tiefling" in race:
+        speed = 30
         intelligence += 1
         charisma += 2
     else:
