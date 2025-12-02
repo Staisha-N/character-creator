@@ -36,7 +36,7 @@ class Race():
         self.speed = None
         self.darkvision = None
         self.tool_proficiencies = None
-        self.language = None
+        self.languages = None
         self.race = None
         self.subrace = None    
     def set(self, scores: Scores, speed: int, darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str):
@@ -44,7 +44,7 @@ class Race():
         self.speed = speed
         self.darkvision = darkvision
         self.tool_proficiencies = tool_proficiencies
-        self.language = language
+        self.languages = languages
         self.race = race
         self.subrace = subrace
 
