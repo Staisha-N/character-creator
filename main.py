@@ -231,60 +231,68 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = 0
     tools = languages = []
 
+    #darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str
+
     if "Dwarf" in race:
         constitution += 2
         speed = 25
+        vision = 60
         if "Hill" in subrace:
             wisdom += 1
         else: #Mountain Dwarf
             strength += 2
-    elif "Elf" in race:
-        speed = 30
+    elif "Elf" in race: 
         dexterity += 2
+        speed = 30
+        vision = 60
         if "High" in subrace:
             intelligence += 1
         else: #Wood Elf
             wisdom += 1
             speed = 35
     elif "Halfling" in race:
-        speed = 25
         dexterity += 2
+        speed = 25
         if "Lightfoot" in subrace:
             charisma += 1
         else: #Stout Halfling
             constitution += 1
-    elif "Human" in race:
-        speed = 30
+    elif "Human" in race:    
         strength += 1
         dexterity += 1
         constitution += 1
         intelligence += 1
         wisdom += 1
         charisma += 1
-    elif "Dragonborn" in race:
         speed = 30
+    elif "Dragonborn" in race:  
         strength += 2
         charisma += 1
-    elif "Gnome" in race:
-        speed = 25
+        speed = 30
+    elif "Gnome" in race:   
         intelligence += 2
+        speed = 25
+        vision = 60
         if "Rock" in subrace:
             constitution += 1
         else: #Forest gnome
             dexterity += 1
-    elif "Half-Elf" in race:
-        speed = 30
+    elif "Half-Elf" in race:     
         charisma += 2
         dexterity += 1
         wisdom += 1
-    elif "Half-Orc" in race:
         speed = 30
+        vision = 60
+    elif "Half-Orc" in race:     
         strength += 2
         constitution += 1
-    elif "Tiefling" in race:
         speed = 30
+        vision = 60
+    elif "Tiefling" in race:
         intelligence += 1
         charisma += 2
+        speed = 30
+        vision = 60
     else:
         print("ERROR: Identified a race outside of the options.")
 
