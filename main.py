@@ -7,6 +7,8 @@ from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 
 llm = ChatOllama(model="llama3.2")
 
+USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."
+
 #Only point buy and race affect the character's scores
 #The idea here would be to have two llm functions both modify the one Character object
 #The first will be in the tool for the point buy and the second will be in a second function 
@@ -233,6 +235,9 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
 
     #darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str
 
+    tool_decision = llm.invoke(f"{USER_QUERY} Do you think this character would want smith's tools, brewer's supplies, or mason's tools. Tell me why.")
+    print("Here is my decision ", tool_decision.content)
+
     if "Dwarf" in race:
         constitution += 2
         speed = 25
@@ -405,7 +410,7 @@ agent_builder.add_edge("tool_node", "llm_call")
 agent = agent_builder.compile()
 
 # Invoke
-messages = [HumanMessage(content="Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers.")]
+messages = [HumanMessage(content=USER_QUERY)]
 messages = agent.invoke({"messages": messages})
 for m in messages["messages"]:
     m.pretty_print()
