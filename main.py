@@ -235,13 +235,13 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
 
     #darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str
 
-    tool_decision = llm.invoke(f"{USER_QUERY} Do you think this character would want smith's tools, brewer's supplies, or mason's tools. Tell me why.")
-    print("Here is my decision ", tool_decision.content)
-
     if "Dwarf" in race:
         constitution += 2
         speed = 25
         vision = 60
+        tool_decision = llm.invoke(f"{USER_QUERY} Do you think this character would want smith's tools, brewer's supplies, or mason's tools. Reply with either SMITH, BREWER or MASON.")
+        print("Here is my decision ", tool_decision.content)
+        tools.append(tool_decision.content)
         if "Hill" in subrace:
             wisdom += 1
         else: #Mountain Dwarf
