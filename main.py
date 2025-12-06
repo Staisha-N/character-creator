@@ -230,7 +230,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
     
-    strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = 0
+    strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
     tools = languages = combat = []
 
     #darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str
@@ -239,15 +239,17 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         constitution += 2
         speed = 25
         vision = 60
-        combat = ["battleaxe", "handaxe", "light hammer", "warhammer"]
+        combat.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
         tool_decision = llm.invoke(f"{USER_QUERY} Do you think this character would want smith's tools, brewer's supplies, or mason's tools. Reply with either SMITH, BREWER or MASON.")
         print("Here is my tool decision ", tool_decision.content)
         tools.append(tool_decision.content)
         languages = ["Common", "Dwarvish"]
         if "Hill" in subrace:
             wisdom += 1
+            HP += 1
         else: #Mountain Dwarf
             strength += 2
+            combat.extend(["light armor", "medium armor"])
     elif "Elf" in race: 
         dexterity += 2
         speed = 30
