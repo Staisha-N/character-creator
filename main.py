@@ -272,7 +272,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     """
     
     strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
-    tools = spells = skills = languages = combat = []
+    tools = spells = skills = languages = combat = misc = []
 
     if "Dwarf" in race:
         constitution += 2
@@ -308,10 +308,16 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     elif "Halfling" in race:
         dexterity += 2
         speed = 25
+        languages = ["Common", "Halfling"]
+        misc.append("When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.")
+        misc.append("You have advantage on saving throws against being frightened.")
+        misc.append("You can move through the space of any creature that is of a size larger than yours.")
         if "Lightfoot" in subrace:
             charisma += 1
+            misc.append("You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.")
         else: #Stout Halfling
             constitution += 1
+            misc.append("You have advantage on saving throws against poison, and you have resistance against poison damage.")
     elif "Human" in race:    
         strength += 1
         dexterity += 1
