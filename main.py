@@ -15,6 +15,42 @@ USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at ph
 #that will determine the race, and do point calculations for race. Both will modify character object.
 #Then we call the aggregation function to combine them.
 
+wizard_cantrips = [
+    "Acid Splash",
+    "Blade Ward"
+    "Booming Blade",
+    "Chill Touch",
+    "Control Flames",
+    "Create Bonfire",
+    "Dancing Lights",
+    "Encode Thoughts",
+    "Fire Bolt",
+    "Friends",
+    "Frostbite",
+    "Green-Flame Blade",
+    "Gust",
+    "Infestation",
+    "Light",
+    "Lightning Lure",
+    "Mage Hand",
+    "Mending",
+    "Message",
+    "Mind Sliver",
+    "Minor Illusion",
+    "Mold Earth",
+    "On/Off (UA)",
+    "Poison Spray",
+    "Prestidigitation",
+    "Ray of Frost",
+    "Sapping Sting",
+    "Shape Water",
+    "Shocking Grasp",
+    "Sword Burst",
+    "Thunderclap",
+    "Toll the Dead",
+    "True Strike"
+]
+
 class Scores():
     def __init__(self, scores: list[int]):
         self.stg = scores[0]
@@ -221,6 +257,11 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
 
     return final_scores
 
+def choose(topic: str, options: list[str]):
+    llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick one extra {topic}. Reply with one option from this list: {options}")
+    print(f"Here is what the llm decided for you: {llm_decision}. Here was the topic: {topic} and the options presented: {options}")
+    return llm_decision.content
+
 @tool
 def race_calculator(race: str = "default", subrace: str = "default") -> list[int]:
     """Choose a race and subrace
@@ -231,18 +272,16 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     """
     
     strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
-    tools = languages = combat = []
-
-    #darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str
+    tools = spells = skills = languages = combat = []
 
     if "Dwarf" in race:
         constitution += 2
         speed = 25
         vision = 60
         combat.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
-        tool_decision = llm.invoke(f"{USER_QUERY} Do you think this character would want smith's tools, brewer's supplies, or mason's tools. Reply with either SMITH, BREWER or MASON.")
+        tool_decision = choose("tool", ["smith", "brewer", "mason"])
         print("Here is my tool decision ", tool_decision.content)
-        tools.append(tool_decision.content)
+        tools.append(tool_decision)
         languages = ["Common", "Dwarvish"]
         if "Hill" in subrace:
             wisdom += 1
@@ -254,8 +293,15 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         dexterity += 2
         speed = 30
         vision = 60
+        combat.extend(["longsword", "shortsword", "shortbow", "longbow"])
+        skills = ["Perception"]
+        languages = ["Common", "Elvish"]
         if "High" in subrace:
             intelligence += 1
+            language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
+            tools.append(language_decision)
+            spell_decision = choose("spell", wizard_cantrips)
+            spells.append(spell_decision)
         else: #Wood Elf
             wisdom += 1
             speed = 35
