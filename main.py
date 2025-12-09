@@ -299,7 +299,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         if "High" in subrace:
             intelligence += 1
             language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
-            tools.append(language_decision)
+            languages.append(language_decision)
             spell_decision = choose("spell", wizard_cantrips)
             spells.append(spell_decision)
         else: #Wood Elf
@@ -326,6 +326,9 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         wisdom += 1
         charisma += 1
         speed = 30
+        languages = ["Common"]
+        language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
+        languages.append(language_decision)
     elif "Dragonborn" in race:  
         strength += 2
         charisma += 1
