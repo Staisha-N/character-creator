@@ -155,7 +155,7 @@ myRace = Race()
 myCharacter = Character()
 
 class CharacterBasics(BaseModel):
-    Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling.")
+    Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Gnome, Half-Elf, Half-Orc or Tiefling.")
     Class: str = Field("low", description="Class - must be one of: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or Wizard.")
 
 @tool
@@ -267,7 +267,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     """Choose a race and subrace
 
     Args:
-        race: the character's race; either Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc or Tiefling
+        race: the character's race; either Dwarf, Elf, Halfling, Human, Gnome, Half-Elf, Half-Orc or Tiefling
         subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
     
@@ -329,10 +329,6 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         languages = ["Common"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
         languages.append(language_decision)
-    elif "Dragonborn" in race:  
-        strength += 2
-        charisma += 1
-        speed = 30
     elif "Gnome" in race:   
         intelligence += 2
         speed = 25
