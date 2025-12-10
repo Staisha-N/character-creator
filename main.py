@@ -333,11 +333,17 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         intelligence += 2
         speed = 25
         vision = 60
+        languages.append(["Common", "Gnomish"])
+        misc.append("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
         if "Rock" in subrace:
             constitution += 1
+            misc.append("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.")
+            misc.append("You have proficiency with artisan's tools (tinker's tools).")
         else: #Forest gnome
             dexterity += 1
-    elif "Half-Elf" in race:     
+            misc.append("You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.")
+            misc.append("Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts.")
+    elif "Half-Elf" in race:
         charisma += 2
         dexterity += 1
         wisdom += 1
