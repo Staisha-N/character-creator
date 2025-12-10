@@ -477,6 +477,4 @@ for m in messages["messages"]:
     m.pretty_print()
 
 
-#For next commit, the plan is to use another tool to calculate race, then use another tool to aggregate.
-#We can modify the myCharacter object during the tool execution also
-#Also, we can try again with having a custom state where we can store more things than just the messages
+#Website: https://5e.tools/races.html#gnome%20(forest)_phb
