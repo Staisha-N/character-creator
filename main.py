@@ -51,6 +51,27 @@ wizard_cantrips = [
     "True Strike"
 ]
 
+full_skill_list = [
+    "Athletics",
+    "Acrobatics",
+    "Sleight of Hand",
+    "Stealth",
+    "Arcana",
+    "History",
+    "Investigation",
+    "Nature",
+    "Religion",
+    "Animal Handling",
+    "Insight",
+    "Medicine",
+    "Perception",
+    "Survival",
+    "Deception",
+    "Intimidation",
+    "Performance",
+    "Persuasion",
+]
+
 class Scores():
     def __init__(self, scores: list[int]):
         self.stg = scores[0]
@@ -257,8 +278,8 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
 
     return final_scores
 
-def choose(topic: str, options: list[str]):
-    llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick one extra {topic}. Reply with one option from this list: {options}")
+def choose(topic: str, options: list[str], num: int=1):
+    llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick {num} extra {topic}. Reply with {num} option(s) from this list: {options}")
     print(f"Here is what the llm decided for you: {llm_decision}. Here was the topic: {topic} and the options presented: {options}")
     return llm_decision.content
 
@@ -294,7 +315,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         speed = 30
         vision = 60
         combat.extend(["longsword", "shortsword", "shortbow", "longbow"])
-        skills = ["Perception"]
+        skills.append("Perception")
         languages = ["Common", "Elvish"]
         if "High" in subrace:
             intelligence += 1
@@ -349,6 +370,11 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         wisdom += 1
         speed = 30
         vision = 60
+        misc.append("You have advantage on saving throws against being charmed, and magic can't put you to sleep.")
+        languages = ["Common", "Elvish"]
+        language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
+        skill_decision = choose("skill proficiency", full_skill_list, 2)
+        skills.append(skill_decision)
     elif "Half-Orc" in race:     
         strength += 2
         constitution += 1
