@@ -373,6 +373,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         misc.append("You have advantage on saving throws against being charmed, and magic can't put you to sleep.")
         languages = ["Common", "Elvish"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
+        languages.append(language_decision)
         skill_decision = choose("skill proficiency", full_skill_list, 2)
         skills.append(skill_decision)
     elif "Half-Orc" in race:     
@@ -380,6 +381,10 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         constitution += 1
         speed = 30
         vision = 60
+        languages = ["Common", "Orc"]
+        skills.append("Intimidation")
+        misc.append("Once per long rest, when you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead.")
+        misc.append("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.")
     elif "Tiefling" in race:
         intelligence += 1
         charisma += 2
