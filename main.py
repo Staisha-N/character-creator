@@ -301,7 +301,6 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         vision = 60
         combat.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
         tool_decision = choose("tool", ["smith", "brewer", "mason"])
-        print("Here is my tool decision ", tool_decision.content)
         tools.append(tool_decision)
         languages = ["Common", "Dwarvish"]
         if "Hill" in subrace:
@@ -383,7 +382,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         vision = 60
         languages = ["Common", "Orc"]
         skills.append("Intimidation")
-        misc.append("Once per long rest, when you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead.")
+        misc.append("Once per long rest, at 0 hit points but not dead, you can drop to 1 hit point instead.")
         misc.append("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.")
     elif "Tiefling" in race:
         intelligence += 1
