@@ -390,6 +390,9 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         charisma += 2
         speed = 30
         vision = 60
+        misc.append("You have resistance to fire damage.")
+        spells.append("thaumaturgy")
+        languages =["Common", "Infernal"]
     else:
         print("ERROR: Identified a race outside of the options.")
 
