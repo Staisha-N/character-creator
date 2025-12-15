@@ -88,24 +88,6 @@ class PointBuy():
         self.pb_scores = pb_scores
     def get_pb_scores(self):
         return self.pb_scores
-    
-class Race():
-    def __init__(self):
-        self.scores = None
-        self.speed = None
-        self.darkvision = None
-        self.tool_proficiencies = None
-        self.languages = None
-        self.race = None
-        self.subrace = None    
-    def set(self, scores: Scores, speed: int, darkvision: int, tool_proficiencies: list[str], languages: list[str], race: str, subrace: str):
-        self.scores = scores
-        self.speed = speed
-        self.darkvision = darkvision
-        self.tool_proficiencies = tool_proficiencies
-        self.languages = languages
-        self.race = race
-        self.subrace = subrace
 
 class Character():
     def __init__(self):
@@ -172,7 +154,6 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
     return abilities
 
 myPointBuy = PointBuy()
-myRace = Race()
 myCharacter = Character()
 
 class CharacterBasics(BaseModel):
@@ -399,10 +380,23 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
 
     final_scores = [strength, dexterity, constitution, intelligence, wisdom, charisma]
     print("Here are the scores: ", final_scores)
-    race_scores = Scores(final_scores)
-    #myRace.set_race_scores(race_scores)
+    
+    myRaceDict = {
+        "race": race,
+        "subrace": subrace,
+        "abilities": final_scores,
+        "speed": speed,
+        "vision": vision,
+        "HP": HP,
+        "tools": tools,
+        "spells": spells,
+        "skills": skills,
+        "languages": languages,
+        "combat": combat,
+        "misc": misc,
+    }
 
-    #aggregator()
+    print("Here is the full race dictionary object: ", myRaceDict)
 
     return final_scores
     
