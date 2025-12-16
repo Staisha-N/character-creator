@@ -399,6 +399,18 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     print("Here is the full race dictionary object: ", myRaceDict)
 
     return final_scores
+
+@tool
+def class_calculator(dnd_class: str = "default") -> list[int]:
+    """Choose my character's class
+
+    Args:
+        class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
+    """
+        
+    print("Here is the class: ", dnd_class)
+
+    return [0]
     
 
 # def aggregator(): 
