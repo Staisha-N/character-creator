@@ -422,7 +422,25 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
 
     Args:
         class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
-    """     
+    """
+
+    HP = 0
+    hit_dice = ""
+    abilities = myCharacter["abilities"]
+    armour = weapons = tools = saving_throws = skills = equipment = []
+
+    if "barbarian" in dnd_class:
+        HP = 12 + abilities[2] #12 + constitution mod
+        hit_dice = "1d12"
+        armour = ["light armor", "medium armor", "shields"]
+        weapons = ["simple weapons", "martial weapons"]
+        saving_throws = ["strength", "constitution"]
+        skills_decision = choose("skill", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
+        skills.append(skills_decision)
+        equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
+        
+
+
         
     print("Here is the class: ", dnd_class)
 
