@@ -154,7 +154,21 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
     return abilities
 
 myPointBuy = PointBuy()
-myCharacter = Character()
+
+myCharacter = {
+    "race": "",
+    "subrace": "",
+    "abilities": [],
+    "speed": 0,
+    "vision": 0,
+    "HP": 0,
+    "tools": [],
+    "spells": [],
+    "skills": [],
+    "languages": [],
+    "combat": [],
+    "misc": [],
+}
 
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Gnome, Half-Elf, Half-Orc or Tiefling.")
@@ -396,6 +410,8 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         "misc": misc,
     }
 
+    myCharacter["abilities"] = final_scores
+
     print("Here is the full race dictionary object: ", myRaceDict)
 
     return final_scores
@@ -406,7 +422,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
 
     Args:
         class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
-    """
+    """     
         
     print("Here is the class: ", dnd_class)
 
