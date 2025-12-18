@@ -72,6 +72,19 @@ full_skill_list = [
     "Persuasion",
 ]
 
+full_instrument_list = [ 
+    "Bagpipes",
+    "Drum",
+    "Dulcimer",
+    "Flute",
+    "Horn",
+    "Lute",
+    "Lyre",
+    "Pan flute",
+    "Shawm",
+    "Viol",
+]
+
 class Scores():
     def __init__(self, scores: list[int]):
         self.stg = scores[0]
@@ -427,7 +440,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     HP = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = weapons = tools = saving_throws = skills = equipment = []
+    armour = weapons = tools = saving_throws = tools = features = skills = equipment = []
 
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
@@ -438,6 +451,22 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         skills_decision = choose("skill", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
         skills.append(skills_decision)
         equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
+        features.extend("Rage", "Unarmored Defense")
+    elif "bard" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        armour = ["light armor"]
+        weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        saving_throws = ["dexterity", "charisma"]
+        skills_decision = choose("skill", full_skill_list, 3)
+        skills.append(skills_decision)
+        features.extend("Spellcasting", "Bardic Inspiration")
+        pack_decision = choose("pack", ["entertainer's pack", "diplomat's pack"])
+        equipment.append(pack_decision)
+        instrument_decision = choose("instruments", full_instrument_list, 4)
+        equipment.extend(instrument_decision)
+        equipment.extend("rapier", "leather armour", "dagger")
+        
         
 
 
