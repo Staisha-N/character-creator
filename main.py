@@ -437,7 +437,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
     """
 
-    HP = 0
+    HP = proficiency_bonus = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
     armour = weapons = tools = saving_throws = tools = features = skills = equipment = []
@@ -452,6 +452,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         skills.append(skills_decision)
         equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
         features.extend("Rage", "Unarmored Defense")
+        proficiency_bonus = 2
     elif "bard" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
@@ -466,6 +467,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         instrument_decision = choose("instruments", full_instrument_list, 4)
         equipment.extend(instrument_decision)
         equipment.extend("rapier", "leather armour", "dagger")
+        proficiency_bonus = 2
         
         
 
