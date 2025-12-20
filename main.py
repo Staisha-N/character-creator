@@ -51,6 +51,21 @@ wizard_cantrips = [
     "True Strike"
 ]
 
+bard_cantrips = [
+    "Blade Ward",
+    "Dancing Lights",
+    "Friends",
+    "Light",
+    "Mage Hand",
+    "Mending",
+    "Message",
+    "Minor Illusion",
+    "Prestidigitation",
+    "Thunderclap",
+    "True Strike",
+    "Vicious Mockery",
+]
+
 full_skill_list = [
     "Athletics",
     "Acrobatics",
@@ -440,7 +455,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     HP = proficiency_bonus = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = weapons = tools = saving_throws = tools = features = skills = equipment = []
+    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = []
 
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
@@ -468,6 +483,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.extend(instrument_decision)
         equipment.extend("rapier", "leather armour", "dagger")
         proficiency_bonus = 2
+        cantrip_decision = choose("bard cantrips", bard_cantrips, 2)
+        cantrips.extend(cantrip_decision)
         
         
 
