@@ -301,9 +301,20 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
 
     return final_scores
 
-def choose(topic: str, options: list[str], num: int=1):
-    llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick {num} extra {topic}. Reply with {num} option(s) from this list: {options}")
-    print(f"Here is what the llm decided for you: {llm_decision}. Here was the topic: {topic} and the options presented: {options}")
+def generateExample(quantity: int):
+    example = "option1"
+    for i in range(2, quantity+1):
+        example += f"#option{i}"
+    return example
+
+def choose(topic: str, options: list[str], quantity: int=1):
+    example = generateExample(quantity)
+    if quantity == 1:
+        llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick one extra {topic}. Reply with one option from this list: {options}. Do not respond with any other text.")
+    else:
+        llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick {quantity} extra {topic}. Reply with {quantity} options from this list: {options}. Return each answer separated by hashtags. Do not add any other text. Do not start with a hashtag, only use them between options. Your response should be in this exact format: '{example}'")
+        
+    print(f"Here is what the llm decided for you: {llm_decision.content}. Here was the topic: {topic} and the options presented: {options}")
     return llm_decision.content
 
 @tool
