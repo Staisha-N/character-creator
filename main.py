@@ -5,7 +5,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 
-llm = ChatOllama(model="llama3.2")
+llm = ChatOllama(model="gemma2:2b")
 
 USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."
 
