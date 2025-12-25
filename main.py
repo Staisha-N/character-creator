@@ -4,6 +4,7 @@ from langchain.tools import tool
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
+from assets import get_asset
 
 llm = ChatOllama(model="gemma2:2b")
 
@@ -14,91 +15,6 @@ USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at ph
 #The first will be in the tool for the point buy and the second will be in a second function 
 #that will determine the race, and do point calculations for race. Both will modify character object.
 #Then we call the aggregation function to combine them.
-
-wizard_cantrips = [
-    "Acid Splash",
-    "Blade Ward"
-    "Booming Blade",
-    "Chill Touch",
-    "Control Flames",
-    "Create Bonfire",
-    "Dancing Lights",
-    "Encode Thoughts",
-    "Fire Bolt",
-    "Friends",
-    "Frostbite",
-    "Green-Flame Blade",
-    "Gust",
-    "Infestation",
-    "Light",
-    "Lightning Lure",
-    "Mage Hand",
-    "Mending",
-    "Message",
-    "Mind Sliver",
-    "Minor Illusion",
-    "Mold Earth",
-    "On/Off (UA)",
-    "Poison Spray",
-    "Prestidigitation",
-    "Ray of Frost",
-    "Sapping Sting",
-    "Shape Water",
-    "Shocking Grasp",
-    "Sword Burst",
-    "Thunderclap",
-    "Toll the Dead",
-    "True Strike"
-]
-
-bard_cantrips = [
-    "Blade Ward",
-    "Dancing Lights",
-    "Friends",
-    "Light",
-    "Mage Hand",
-    "Mending",
-    "Message",
-    "Minor Illusion",
-    "Prestidigitation",
-    "Thunderclap",
-    "True Strike",
-    "Vicious Mockery",
-]
-
-full_skill_list = [
-    "Athletics",
-    "Acrobatics",
-    "Sleight of Hand",
-    "Stealth",
-    "Arcana",
-    "History",
-    "Investigation",
-    "Nature",
-    "Religion",
-    "Animal Handling",
-    "Insight",
-    "Medicine",
-    "Perception",
-    "Survival",
-    "Deception",
-    "Intimidation",
-    "Performance",
-    "Persuasion",
-]
-
-full_instrument_list = [ 
-    "Bagpipes",
-    "Drum",
-    "Dulcimer",
-    "Flute",
-    "Horn",
-    "Lute",
-    "Lyre",
-    "Pan flute",
-    "Shawm",
-    "Viol",
-]
 
 class Scores():
     def __init__(self, scores: list[int]):
@@ -307,7 +223,8 @@ def generateExample(quantity: int):
         example += f"#option{i}"
     return example
 
-def choose(topic: str, options: list[str], quantity: int=1):
+def choose(topic: str, options_str: str, quantity: int=1):
+    options = get_asset(options_str)
     example = generateExample(quantity)
     if quantity == 1:
         llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick one extra {topic}. Reply with one option from this list: {options}. Do not respond with any other text.")
@@ -354,7 +271,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
             intelligence += 1
             language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
             languages.append(language_decision)
-            spell_decision = choose("spell", wizard_cantrips)
+            spell_decision = choose("spell", "wizard_cantrips")
             spells.append(spell_decision)
         else: #Wood Elf
             wisdom += 1
@@ -407,7 +324,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         languages = ["Common", "Elvish"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
         languages.append(language_decision)
-        skill_decision = choose("skill proficiency", full_skill_list, 2)
+        skill_decision = choose("skill proficiency", "skills", 2)
         skills.append(skill_decision)
     elif "Half-Orc" in race:     
         strength += 2
@@ -485,16 +402,16 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         armour = ["light armor"]
         weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
         saving_throws = ["dexterity", "charisma"]
-        skills_decision = choose("skill", full_skill_list, 3)
+        skills_decision = choose("skill", "skills", 3)
         skills.append(skills_decision)
         features.extend("Spellcasting", "Bardic Inspiration")
         pack_decision = choose("pack", ["entertainer's pack", "diplomat's pack"])
         equipment.append(pack_decision)
-        instrument_decision = choose("instruments", full_instrument_list, 4)
+        instrument_decision = choose("instruments", "instruments", 4)
         equipment.extend(instrument_decision)
         equipment.extend("rapier", "leather armour", "dagger")
         proficiency_bonus = 2
-        cantrip_decision = choose("bard cantrips", bard_cantrips, 2)
+        cantrip_decision = choose("bard cantrips", "bard_cantrips", 2)
         cantrips.extend(cantrip_decision)
         
         
