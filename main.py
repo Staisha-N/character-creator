@@ -223,8 +223,7 @@ def generateExample(quantity: int):
         example += f"#option{i}"
     return example
 
-def choose(topic: str, options_str: str, quantity: int=1):
-    options = get_asset(options_str)
+def choose(topic: str, options: list[str], quantity: int=1):
     example = generateExample(quantity)
     if quantity == 1:
         llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick one extra {topic}. Reply with one option from this list: {options}. Do not respond with any other text.")
@@ -251,7 +250,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         speed = 25
         vision = 60
         combat.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
-        tool_decision = choose("tool", ["smith", "brewer", "mason"])
+        tool_decision = choose("tool proficiency", ["smith", "brewer", "mason"])
         tools.append(tool_decision)
         languages = ["Common", "Dwarvish"]
         if "Hill" in subrace:
@@ -271,7 +270,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
             intelligence += 1
             language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
             languages.append(language_decision)
-            spell_decision = choose("spell", "wizard_cantrips")
+            spell_decision = choose("spell", get_asset("wizard_cantrips"))
             spells.append(spell_decision)
         else: #Wood Elf
             wisdom += 1
@@ -324,7 +323,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         languages = ["Common", "Elvish"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
         languages.append(language_decision)
-        skill_decision = choose("skill proficiency", "skills", 2)
+        skill_decision = choose("skills", get_asset("skills"), 2)
         skills.append(skill_decision)
     elif "Half-Orc" in race:     
         strength += 2
@@ -380,7 +379,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
     """
 
-    HP = proficiency_bonus = 0
+    HP = proficiency_bonus = spellslots = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
     armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = []
@@ -391,7 +390,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["simple weapons", "martial weapons"]
         saving_throws = ["strength", "constitution"]
-        skills_decision = choose("skill", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
+        skills_decision = choose("skills", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
         skills.append(skills_decision)
         equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
         features.extend("Rage", "Unarmored Defense")
@@ -402,20 +401,20 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         armour = ["light armor"]
         weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
         saving_throws = ["dexterity", "charisma"]
-        skills_decision = choose("skill", "skills", 3)
+        skills_decision = choose("skills", get_asset("skills"), 3)
         skills.append(skills_decision)
         features.extend("Spellcasting", "Bardic Inspiration")
         pack_decision = choose("pack", ["entertainer's pack", "diplomat's pack"])
         equipment.append(pack_decision)
-        instrument_decision = choose("instruments", "instruments", 4)
+        instrument_decision = choose("instruments", get_asset("instruments"), 4)
         equipment.extend(instrument_decision)
         equipment.extend("rapier", "leather armour", "dagger")
         proficiency_bonus = 2
-        cantrip_decision = choose("bard cantrips", "bard_cantrips", 2)
+        cantrip_decision = choose("bard cantrips", get_asset("bard_cantrips"), 2)
         cantrips.extend(cantrip_decision)
-        spell_decision = choose("bard spells", "bard_spellss", 4)
+        spell_decision = choose("bard spells", get_asset("bard_spells"), 4)
         cantrips.extend(spell_decision)
-        
+        spellslots = 2
         
 
 
