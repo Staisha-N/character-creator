@@ -413,6 +413,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         proficiency_bonus = 2
         cantrip_decision = choose("bard cantrips", "bard_cantrips", 2)
         cantrips.extend(cantrip_decision)
+        spell_decision = choose("bard spells", "bard_spellss", 4)
+        cantrips.extend(spell_decision)
         
         
 
