@@ -382,7 +382,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     HP = proficiency_bonus = spellslots = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = []
+    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = spells = []
 
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
@@ -413,7 +413,26 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         cantrip_decision = choose("bard cantrips", get_asset("bard_cantrips"), 2)
         cantrips.extend(cantrip_decision)
         spell_decision = choose("bard spells", get_asset("bard_spells"), 4)
-        cantrips.extend(spell_decision)
+        spells.extend(spell_decision)
+        spellslots = 2
+    elif "cleric" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        armour = ["light armor", "medium armor", "shields"]
+        weapons = ["Simple weapons"]
+        saving_throws = ["wisdom", "charisma"]
+        skills_decision = choose("skills", ["History", "Insight", "Medicine", "Persuasion", "Religion"], 2)
+        skills.append(skills_decision)
+        features.extend("Spellcasting", "Divine Domain")
+        pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend("mace", "scale mail", "light crossbow and 20 bolts", "shield")
+        holy_item_decision = choose("holy item", ["prayer beads", "censer", "chalice", "bone", "cloth", "sacred text", "holy water", "sacred oil", "stone from holy site"])
+        equipment.extend(holy_item_decision)
+        proficiency_bonus = 2
+        cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 3)
+        cantrips.extend(cantrip_decision)
+        # Knows all spells
         spellslots = 2
         
 
