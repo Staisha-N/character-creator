@@ -117,6 +117,20 @@ bard_spells = [
     "Unseen Servant",
 ]
 
+cleric_cantrips = [
+    "Guidance",
+    "Hand of Radiance (UA)",
+    "Light",
+    "Mending",
+    "Resistance",
+    "Sacred Flame",
+    "Spare the Dying",
+    "Thaumaturgy",
+    "Toll the Dead",
+    "Virtue (UA)",
+    "Word of Radiance"
+]
+
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
