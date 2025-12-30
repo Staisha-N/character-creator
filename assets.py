@@ -131,12 +131,35 @@ cleric_cantrips = [
     "Word of Radiance"
 ]
 
+druid_cantrips = [
+    "Control Flames",
+    "Create Bonfire",
+    "Druidcraft",
+    "Frostbite",
+    "Guidance",
+    "Gust",
+    "Infestation",
+    "Magic Stone",
+    "Mending",
+    "Mold Earth",
+    "Poison Spray",
+    "Primal Savagery",
+    "Produce Flame",
+    "Resistance",
+    "Shape Water",
+    "Shillelagh",
+    "Thorn Whip",
+    "Thunderclap"
+]
+
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
     "wizard_cantrips": wizard_cantrips,
     "bard_spells": bard_spells,
-    "bard_cantrips": bard_cantrips
+    "bard_cantrips": bard_cantrips,
+    "cleric_cantrips": cleric_cantrips,
+    "druid_cantrips": druid_cantrips,
 }
 
 def get_asset(asset_type: str):
