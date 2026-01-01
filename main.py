@@ -382,7 +382,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     HP = proficiency_bonus = spellslots = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = spells = []
+    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = spells = languages = []
 
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
@@ -432,6 +432,23 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         proficiency_bonus = 2
         cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 3)
         cantrips.extend(cantrip_decision)
+        # Knows all spells
+        spellslots = 2
+    elif "druid" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        armour = ["light armor", "medium armor", "shields"]
+        weapons = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
+        saving_throws = ["wisdom", "intelligence"]
+        skills_decision = choose("skills", ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], 2)
+        skills.append(skills_decision)
+        features.extend("Spellcasting", "Druidic")
+        equipment.extend("explorer's pack", "herbalism kit", "wooden shield", "scimitar", "leather armor")
+        equipment.extend("mace", "scale mail", "light crossbow and 20 bolts", "shield")
+        proficiency_bonus = 2
+        cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 2)
+        cantrips.extend(cantrip_decision)
+        languages.append("druidic")
         # Knows all spells
         spellslots = 2
         
