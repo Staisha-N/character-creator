@@ -6,7 +6,7 @@ from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from assets import get_asset
 
-llm = ChatOllama(model="gemma2:2b")
+llm = ChatOllama(model="llama3.2")
 
 USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."
 
@@ -171,11 +171,6 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
 
     sorted_abilities = sorted(abilities, key=lambda this_ability: this_ability.get_priority())
 
-    temp_index = 1
-    for ability in sorted_abilities:
-        print("My ", ability.ID, " is number ", temp_index)
-        temp_index += 1
-
     point_allowance = 27
 
     if "balanced" in distribution:
@@ -202,9 +197,6 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
         print(ability.ID, " has this many points: ", this_point)
 
     sorted_abilities_by_ID = sorted(sorted_abilities, key=lambda this_ability: this_ability.get_ID())
-
-    for ability in sorted_abilities_by_ID:
-        print("ID=", ability.ID)
 
     final_scores = []
     for i in range(6):
@@ -460,29 +452,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     return [0]
     
 
-# def aggregator(): 
-#     pb_scores = myCharacterBuilder.get_pb_scores()
-#     race_scores = myCharacterBuilder.get_race_scores()
-
-#     combined_scores = []
-#     combined_scores.append(pb_scores.stg + race_scores.stg)
-#     combined_scores.append(pb_scores.dex + race_scores.dex)
-#     combined_scores.append(pb_scores.con + race_scores.con)
-#     combined_scores.append(pb_scores.inte + race_scores.inte)
-#     combined_scores.append(pb_scores.wis + race_scores.wis)
-#     combined_scores.append(pb_scores.cha + race_scores.cha)
-
-#     print("Here are the combined scores: ", combined_scores)
-
-#     scores = Scores(combined_scores)
-#     myCharacter.set_final_scores(scores)
-
-# def register_basics(state: dict):
-#     basics_llm = llm.with_structured_output(CharacterBasics)
-#     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
-#     print("Here are the basics: ", basics_decision)
-
-tools = [point_buy_calculator, race_calculator]
+tools = [point_buy_calculator, race_calculator, class_calculator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
 
@@ -496,12 +466,13 @@ def llm_call(state: MessagesState):
                 [
                     SystemMessage(
                         content=(
-                            "You are a helpful assistant that must ALWAYS call exactly two tools, "
+                            "You are a helpful assistant that must ALWAYS call exactly three tools, "
                             "in this order: "
                             "1) point_buy_calculator "
                             "2) race_calculator "
-                            "Do not provide a final answer until BOTH tool calls have been made. "
-                            "If the user asks for a character build, always plan on calling both tools."
+                            "3) class_calculator"
+                            "Do not provide a final answer until ALL THREE tool calls have been made. "
+                            "If the user asks for a character build, always plan on calling all tools."
                         )
                     )
                 ]
@@ -559,8 +530,8 @@ agent = agent_builder.compile()
 # Invoke
 messages = [HumanMessage(content=USER_QUERY)]
 messages = agent.invoke({"messages": messages})
-for m in messages["messages"]:
-    m.pretty_print()
+# for m in messages["messages"]:
+#     m.pretty_print()
 
 
 #Website: https://5e.tools/races.html#gnome%20(forest)_phb
