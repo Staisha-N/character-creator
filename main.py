@@ -388,7 +388,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         skills.append(skills_decision)
         equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
         features.extend("Rage", "Unarmored Defense")
-        proficiency_bonus = 2
     elif "bard" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
@@ -404,7 +403,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         instrument_decision = choose("instruments", get_asset("instruments"), 4)
         equipment.extend(instrument_decision)
         equipment.extend("rapier", "leather armour", "dagger")
-        proficiency_bonus = 2
         cantrip_decision = choose("bard cantrips", get_asset("bard_cantrips"), 2)
         cantrips.extend(cantrip_decision)
         spell_decision = choose("bard spells", get_asset("bard_spells"), 4)
@@ -425,7 +423,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.extend("mace", "scale mail", "light crossbow and 20 bolts", "shield")
         holy_item_decision = choose("holy item", ["prayer beads", "censer", "chalice", "bone", "cloth", "sacred text", "holy water", "sacred oil", "stone from holy site"])
         equipment.extend(holy_item_decision)
-        proficiency_bonus = 2
         cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 3)
         cantrips.extend(cantrip_decision)
         # Knows all spells
@@ -442,7 +439,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         features.extend("Spellcasting", "Druidic")
         equipment.extend("explorer's pack", "herbalism kit", "wooden shield", "scimitar", "leather armor")
         equipment.extend("mace", "scale mail", "light crossbow and 20 bolts", "shield")
-        proficiency_bonus = 2
         cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 2)
         cantrips.extend(cantrip_decision)
         languages.append("druidic")
@@ -460,7 +456,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.extend("chain mail", "light crossbow and 20 bolts", "shield", "flail")
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
-        proficiency_bonus = 2
         
 
 
