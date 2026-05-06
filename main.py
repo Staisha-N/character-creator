@@ -456,6 +456,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.extend("chain mail", "light crossbow and 20 bolts", "shield", "flail")
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
+        features.extend("Fighting Style:Archery", "Second Wind")
         
 
 
