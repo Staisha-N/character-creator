@@ -375,13 +375,15 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     hit_dice = ""
     abilities = myCharacter["abilities"]
     armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = spells = languages = []
+    strength = dexterity = constitution = intelligence = wisdom = charisma = 0
 
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
         hit_dice = "1d12"
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["simple weapons", "martial weapons"]
-        saving_throws = ["strength", "constitution"]
+        strength += 2
+        constitution += 2
         skills_decision = choose("skills", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
         skills.append(skills_decision)
         equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
@@ -392,7 +394,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d8"
         armour = ["light armor"]
         weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
-        saving_throws = ["dexterity", "charisma"]
+        dexterity += 2
+        charisma += 2
         skills_decision = choose("skills", get_asset("skills"), 3)
         skills.append(skills_decision)
         features.extend("Spellcasting", "Bardic Inspiration")
@@ -412,7 +415,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d8"
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["Simple weapons"]
-        saving_throws = ["wisdom", "charisma"]
+        wisdom += 2
+        charisma += 2
         skills_decision = choose("skills", ["History", "Insight", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
         features.extend("Spellcasting", "Divine Domain")
@@ -431,7 +435,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d8"
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
-        saving_throws = ["wisdom", "intelligence"]
+        wisdom += 2
+        intelligence += 2
         skills_decision = choose("skills", ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], 2)
         skills.append(skills_decision)
         features.extend("Spellcasting", "Druidic")
@@ -443,6 +448,19 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         languages.append("druidic")
         # Knows all spells
         spellslots = 2
+    elif "fighter" in dnd_class:
+        HP = 10 + abilities[2]
+        hit_dice = "1d10"
+        armour = ["light armor", "medium armor", "heavy armor", "shields"]
+        weapons = ["simple weapons", "martial weapons"]
+        strength += 2
+        constitution += 2
+        skills_decision = choose("skills", ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], 2)
+        skills.append(skills_decision)
+        equipment.extend("chain mail", "light crossbow and 20 bolts", "shield", "flail")
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        proficiency_bonus = 2
         
 
 
