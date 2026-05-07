@@ -374,7 +374,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     HP = proficiency_bonus = spellslots = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = spells = languages = []
+    armour = weapons = saving_throws = features = skills = equipment = cantrips = spells = languages = []
     strength = dexterity = constitution = intelligence = wisdom = charisma = 0
 
     if "barbarian" in dnd_class:
@@ -457,6 +457,24 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
         features.extend("Fighting Style:Archery", "Second Wind")
+        #TODO: add Fighting Style bonus to equipment of fighter
+    elif "monk" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        weapons = ["simple weapons", "shortswords"]
+        instrument_decision = choose("instruments", get_asset("instruments"), 4)
+        equipment.extend(instrument_decision)
+        strength += 2
+        dexterity += 2
+        skills_decision = choose("skills", ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"], 2)
+        skills.append(skills_decision)
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend("shortsword", "10 darts")
+        features.extend("Unarmored Defense", "Martial Arts")
+        #AC = 10 + Dex + Wis
+        #damage= 1d4
+
         
 
 
