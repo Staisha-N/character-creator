@@ -474,7 +474,19 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         features.extend("Unarmored Defense", "Martial Arts")
         #AC = 10 + Dex + Wis
         #damage= 1d4
-
+    elif "paladin" in dnd_class:
+        HP = 10 + abilities[2]
+        hit_dice = "1d10"
+        armour = ["light armor", "medium armor", "heavy armor", "shields"]
+        weapons = ["simple weapons", "martial weapons"]
+        wisdom += 2
+        charisma += 2
+        skills_decision = choose("skills", ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"], 2)
+        skills.append(skills_decision)
+        pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend("flail", "shield", "5 javelins", "chain mail", "holy symbol")
+        features.extend(f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)")
         
 
 
