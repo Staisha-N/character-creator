@@ -487,7 +487,25 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.append(pack_decision)
         equipment.extend("flail", "shield", "5 javelins", "chain mail", "holy symbol")
         features.extend(f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)")
-        
+    elif "ranger" in dnd_class:
+        HP = 10 + abilities[2]
+        hit_dice = "1d10"
+        armour = ["light armor", "medium armor", "shields"]
+        weapons = ["simple weapons", "martial weapons"]
+        strength += 2
+        dexterity += 2
+        skills_decision = choose("skills", ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"], 2)
+        skills.append(skills_decision)
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend("scale mail", "two shortswords", "longbow", "quiver of 20 arrows")
+        features.extend(f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)")
+        enemy_decision = choose("favored enemy", ["aberrations", "beasts", "celestials", "constructs", "dragons", "elementals", "fey", "fiends", "giants", "monstrosities", "oozes", "plants", "undead"], 1)
+        terrain_decision = choose("favored terrain", ["arctic", "coast", "desert", "forest", "grassland", "mountain", "swamp", "the Underdark"], 1)
+        features.extend(f"{enemy_decision} Favored enemy (adv on Wis/Int)", f"{terrain_decision} Natural Explorer (prof. bonus x2 for Wis/Int)")
+        languages.append(f"{enemy_decision}'s language")
+
+
 
 
         
