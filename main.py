@@ -6,7 +6,7 @@ from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from assets import get_asset
 
-llm = ChatOllama(model="gemma2:2b")
+llm = ChatOllama(model="llama3.1")
 
 USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."
 
@@ -143,20 +143,17 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
     wisdom = Ability(5, wis, 0, 8)
     charisma = Ability(6, cha, 0, 8)
 
+    #Setting ability priorities within the six Ability classes created above.
     abilities = [strength, dexterity, constitution, intelligence, wisdom, charisma]
-
     ability_count = 0
-
     for ability in abilities:
         if "high" in ability.get_desc():
             ability.set_priority(ability_count + 1) 
             ability_count += 1
-
     for ability in abilities:
         if "medium" in ability.get_desc():
             ability.set_priority(ability_count + 1) 
             ability_count += 1
-
     for ability in abilities:
         if "high" not in ability.get_desc() and "medium" not in ability.get_desc():
             ability.set_priority(ability_count + 1) 
@@ -399,7 +396,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
         armour = ["light armor"]
-        weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        weapons = ["simple", "hand crossbows", "longswords", "rapiers", "shortswords"]
         saving_throws = ["dexterity", "charisma"]
         skills_decision = choose("skills", get_asset("skills"), 3)
         skills.append(skills_decision)
@@ -419,7 +416,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
         armour = ["light armor", "medium armor", "shields"]
-        weapons = ["Simple weapons"]
+        weapons = ["simple"]
         saving_throws = ["wisdom", "charisma"]
         skills_decision = choose("skills", ["History", "Insight", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
@@ -438,7 +435,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
         armour = ["light armor", "medium armor", "shields"]
-        weapons = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
+        weapons = ["clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
         saving_throws = ["wisdom", "intelligence"]
         skills_decision = choose("skills", ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], 2)
         skills.append(skills_decision)
@@ -451,7 +448,20 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         languages.append("druidic")
         # Knows all spells
         spellslots = 2
-        
+    if "fighter" in dnd_class:
+        HP = 10 + abilities[2]
+        hit_dice = "1d10"
+        armour = ["light armor", "medium armor", "heavy armor", "shields"]
+        weapons = ["simple", "martial"]
+        saving_throws = ["strength", "constitution"]
+        skills_decision = choose("skills", ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], 2)
+        skills.append(skills_decision)
+        equipment.extend("chain mail", "longsword", "shield", "light crossbow and 20 bolts")
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        fighting_style_decision = choose("fighting style", ["archery", "defense", "dueling", "great weapon fighting", "protection", "two-weapon fighting"])
+        features.extend(fighting_style_decision, "second wind")
+        proficiency_bonus = 2
 
 
         
