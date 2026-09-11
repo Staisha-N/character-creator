@@ -472,7 +472,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.extend(["chain mail", "light crossbow and 20 bolts", "shield", "flail"])
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
-        features.extend(["Fighting Style:Archery", "Second Wind"])
+        fighting_style_decision = choose("fighting style", ["archery", "defense", "dueling", "great weapon fighting", "protection", "two-weapon fighting"])
+        features.extend([f"Fighting Style: {fighting_style_decision}", "Second Wind"])
         #TODO: add Fighting Style bonus to equipment of fighter
     elif "monk" in dnd_class:
         HP = 8 + abilities[2]
