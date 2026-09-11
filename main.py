@@ -8,7 +8,7 @@ from assets import get_asset
 
 llm = ChatOllama(model="llama3.1")
 
-USER_QUERY = "Consider a strong Dungeons and Dragons character that excels at physical combat. Call the tool to decider its modifiers."
+USER_QUERY = "Consider a cunning Dungeons and Dragons character that is a sneaky criminal. Call the tools to decider its modifiers, race and class."
 
 #Only point buy and race affect the character's scores
 #The idea here would be to have two llm functions both modify the one Character object
@@ -168,11 +168,6 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
 
     sorted_abilities = sorted(abilities, key=lambda this_ability: this_ability.get_priority())
 
-    temp_index = 1
-    for ability in sorted_abilities:
-        print("My ", ability.ID, " is number ", temp_index)
-        temp_index += 1
-
     point_allowance = 27
 
     if "balanced" in distribution:
@@ -194,14 +189,11 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
             if point_allowance <= 0:
                 break
 
-    for ability in sorted_abilities:
-        this_point = ability.get_points()
-        print(ability.ID, " has this many points: ", this_point)
+    # for ability in sorted_abilities:
+    #     this_point = ability.get_points()
+    #     print(ability.ID, " has this many points: ", this_point)
 
     sorted_abilities_by_ID = sorted(sorted_abilities, key=lambda this_ability: this_ability.get_ID())
-
-    for ability in sorted_abilities_by_ID:
-        print("ID=", ability.ID)
 
     final_scores = []
     for i in range(6):
@@ -224,11 +216,13 @@ def choose(topic: str, options: list[str], quantity: int=1):
     example = generateExample(quantity)
     if quantity == 1:
         llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick one extra {topic}. Reply with one option from this list: {options}. Do not respond with any other text.")
+        result = llm_decision.content
     else:
         llm_decision = llm.invoke(f"I am trying to build this character: {USER_QUERY}. I get to pick {quantity} extra {topic}. Reply with {quantity} options from this list: {options}. Return each answer separated by hashtags. Do not add any other text. Do not start with a hashtag, only use them between options. Your response should be in this exact format: '{example}'")
+        result = llm_decision.content.split("#")
         
-    print(f"Here is what the llm decided for you: {llm_decision.content}. Here was the topic: {topic} and the options presented: {options}")
-    return llm_decision.content
+    print(f"Here is what the llm decided for you: {result}. Here was the topic: {topic} and the options presented: {options}")
+    return result
 
 @tool
 def race_calculator(race: str = "default", subrace: str = "default") -> list[int]:
@@ -376,37 +370,53 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
     """
 
+    dnd_class = dnd_class.lower()
     HP = proficiency_bonus = spellslots = 0
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = weapons = tools = saving_throws = tools = features = skills = equipment = cantrips = spells = languages = []
+    armour = []
+    weapons = []
+    saving_throws = []
+    features = []
+    skills = []
+    equipment = []
+    cantrips = []
+    spells = []
+    languages = []
+    strength = 0
+    dexterity = 0
+    constitution = 0
+    intelligence = 0
+    wisdom = 0
+    charisma = 0
 
+    #TODO: fix the "extend" for results of calls to choose function
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
         hit_dice = "1d12"
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["simple weapons", "martial weapons"]
-        saving_throws = ["strength", "constitution"]
+        strength += 2
+        constitution += 2
         skills_decision = choose("skills", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
         skills.append(skills_decision)
-        equipment.extend("greataxe", "two handaxes", "explorer’s pack", "four javelins")
-        features.extend("Rage", "Unarmored Defense")
-        proficiency_bonus = 2
+        equipment.extend(["greataxe", "two handaxes", "explorer's pack", "four javelins"])
+        features.extend(["Rage", "Unarmored Defense"])
     elif "bard" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
         armour = ["light armor"]
-        weapons = ["simple", "hand crossbows", "longswords", "rapiers", "shortswords"]
-        saving_throws = ["dexterity", "charisma"]
+        weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        dexterity += 2
+        charisma += 2
         skills_decision = choose("skills", get_asset("skills"), 3)
         skills.append(skills_decision)
-        features.extend("Spellcasting", "Bardic Inspiration")
+        features.extend(["Spellcasting", "Bardic Inspiration"])
         pack_decision = choose("pack", ["entertainer's pack", "diplomat's pack"])
         equipment.append(pack_decision)
         instrument_decision = choose("instruments", get_asset("instruments"), 4)
         equipment.extend(instrument_decision)
-        equipment.extend("rapier", "leather armour", "dagger")
-        proficiency_bonus = 2
+        equipment.extend(["rapier", "leather armour", "dagger"])
         cantrip_decision = choose("bard cantrips", get_asset("bard_cantrips"), 2)
         cantrips.extend(cantrip_decision)
         spell_decision = choose("bard spells", get_asset("bard_spells"), 4)
@@ -418,15 +428,17 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["simple"]
         saving_throws = ["wisdom", "charisma"]
+        weapons = ["Simple weapons"]
+        wisdom += 2
+        charisma += 2
         skills_decision = choose("skills", ["History", "Insight", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
-        features.extend("Spellcasting", "Divine Domain")
+        features.extend(["Spellcasting", "Divine Domain"])
         pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
         equipment.append(pack_decision)
-        equipment.extend("mace", "scale mail", "light crossbow and 20 bolts", "shield")
+        equipment.extend(["mace", "scale mail", "light crossbow and 20 bolts", "shield"])
         holy_item_decision = choose("holy item", ["prayer beads", "censer", "chalice", "bone", "cloth", "sacred text", "holy water", "sacred oil", "stone from holy site"])
         equipment.extend(holy_item_decision)
-        proficiency_bonus = 2
         cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 3)
         cantrips.extend(cantrip_decision)
         # Knows all spells
@@ -435,64 +447,115 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
         armour = ["light armor", "medium armor", "shields"]
-        weapons = ["clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
-        saving_throws = ["wisdom", "intelligence"]
+        weapons = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
+        wisdom += 2
+        intelligence += 2
         skills_decision = choose("skills", ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], 2)
         skills.append(skills_decision)
-        features.extend("Spellcasting", "Druidic")
-        equipment.extend("explorer's pack", "herbalism kit", "wooden shield", "scimitar", "leather armor")
-        equipment.extend("mace", "scale mail", "light crossbow and 20 bolts", "shield")
-        proficiency_bonus = 2
+        features.extend(["Spellcasting", "Druidic"])
+        equipment.extend(["explorer's pack", "herbalism kit", "wooden shield", "scimitar", "leather armor"])
+        equipment.extend(["mace", "scale mail", "light crossbow and 20 bolts", "shield"])
         cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 2)
         cantrips.extend(cantrip_decision)
         languages.append("druidic")
         # Knows all spells
         spellslots = 2
-    if "fighter" in dnd_class:
+    elif "fighter" in dnd_class:
         HP = 10 + abilities[2]
         hit_dice = "1d10"
         armour = ["light armor", "medium armor", "heavy armor", "shields"]
-        weapons = ["simple", "martial"]
-        saving_throws = ["strength", "constitution"]
+        weapons = ["simple weapons", "martial weapons"]
+        strength += 2
+        constitution += 2
         skills_decision = choose("skills", ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], 2)
         skills.append(skills_decision)
-        equipment.extend("chain mail", "longsword", "shield", "light crossbow and 20 bolts")
+        equipment.extend(["chain mail", "light crossbow and 20 bolts", "shield", "flail"])
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
-        fighting_style_decision = choose("fighting style", ["archery", "defense", "dueling", "great weapon fighting", "protection", "two-weapon fighting"])
-        features.extend(fighting_style_decision, "second wind")
-        proficiency_bonus = 2
+        features.extend(["Fighting Style:Archery", "Second Wind"])
+        #TODO: add Fighting Style bonus to equipment of fighter
+    elif "monk" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        weapons = ["simple weapons", "shortswords"]
+        instrument_decision = choose("instruments", get_asset("instruments"), 4)
+        equipment.extend(instrument_decision)
+        strength += 2
+        dexterity += 2
+        skills_decision = choose("skills", ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"], 2)
+        skills.append(skills_decision)
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend(["shortsword", "10 darts"])
+        features.extend(["Unarmored Defense", "Martial Arts"])
+        #AC = 10 + Dex + Wis
+        #damage= 1d4
+    elif "paladin" in dnd_class:
+        HP = 10 + abilities[2]
+        hit_dice = "1d10"
+        armour = ["light armor", "medium armor", "heavy armor", "shields"]
+        weapons = ["simple weapons", "martial weapons"]
+        wisdom += 2
+        charisma += 2
+        skills_decision = choose("skills", ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"], 2)
+        skills.append(skills_decision)
+        pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend(["flail", "shield", "5 javelins", "chain mail", "holy symbol"])
+        features.extend([f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)"])
+    elif "ranger" in dnd_class:
+        HP = 10 + abilities[2]
+        hit_dice = "1d10"
+        armour = ["light armor", "medium armor", "shields"]
+        weapons = ["simple weapons", "martial weapons"]
+        strength += 2
+        dexterity += 2
+        skills_decision = choose("skills", ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"], 2)
+        skills.append(skills_decision)
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        equipment.extend(["scale mail", "two shortswords", "longbow", "quiver of 20 arrows"])
+        features.extend([f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)"])
+        enemy_decision = choose("favored enemy", ["aberrations", "beasts", "celestials", "constructs", "dragons", "elementals", "fey", "fiends", "giants", "monstrosities", "oozes", "plants", "undead"], 1)
+        terrain_decision = choose("favored terrain", ["arctic", "coast", "desert", "forest", "grassland", "mountain", "swamp", "the Underdark"], 1)
+        features.extend([f"{enemy_decision} Favored enemy (adv on Wis/Int)", f"{terrain_decision} Natural Explorer (prof. bonus x2 for Wis/Int)"])
+        languages.append([f"{enemy_decision}'s language"])
+    elif "rogue" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        armour = ["light armor"]
+        weapons = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        equipment.append("Thieves' tools")
+        dexterity += 2
+        intelligence += 2
+        skills_decision = choose("skills", ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"], 4)
+        expertise = choose("skills to be doubly proficient in because of rogue expertise", skills_decision, 2)
+        skills.extend(expertise)
+        #TODO: when computing skill scores, do +2 for every skill name in skills list.
+        pack_decision = choose("pack", ["burglar's pack", "dungeoneer's pack", "explorer's pack"])
+        skills.extend(skills_decision)
+        equipment.extend(["rapier", "shortsword", "leather armor", "2 daggers"])
+        equipment.append(pack_decision)
+        features.extend(["Sneak Attack (1d8 more damage on adv/enemy within 5 feet)", "Theives' Cant (Secretly talk with other thieves)"])
+
+
 
 
         
     print("Here is the class: ", dnd_class)
+    print("HP=", HP)
+    print("hit dice=", hit_dice)
+    print("armor=", armour)
+    print("weapons=", weapons)
+    print("equipment=", equipment)
+    print("skills=", skills)
+    print("expertise=", expertise)
+    print("features=", features)
 
     return [0]
     
 
-# def aggregator(): 
-#     pb_scores = myCharacterBuilder.get_pb_scores()
-#     race_scores = myCharacterBuilder.get_race_scores()
-
-#     combined_scores = []
-#     combined_scores.append(pb_scores.stg + race_scores.stg)
-#     combined_scores.append(pb_scores.dex + race_scores.dex)
-#     combined_scores.append(pb_scores.con + race_scores.con)
-#     combined_scores.append(pb_scores.inte + race_scores.inte)
-#     combined_scores.append(pb_scores.wis + race_scores.wis)
-#     combined_scores.append(pb_scores.cha + race_scores.cha)
-
-#     print("Here are the combined scores: ", combined_scores)
-
-#     scores = Scores(combined_scores)
-#     myCharacter.set_final_scores(scores)
-
-# def register_basics(state: dict):
-#     basics_llm = llm.with_structured_output(CharacterBasics)
-#     basics_decision = basics_llm.invoke("Consider a strong Dungeons and Dragons character that excels at physical combat. Choose its race and class.")
-#     print("Here are the basics: ", basics_decision)
-
-tools = [point_buy_calculator, race_calculator]
+tools = [point_buy_calculator, race_calculator, class_calculator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
 
@@ -506,12 +569,13 @@ def llm_call(state: MessagesState):
                 [
                     SystemMessage(
                         content=(
-                            "You are a helpful assistant that must ALWAYS call exactly two tools, "
+                            "You are a helpful assistant that must ALWAYS call exactly three tools, "
                             "in this order: "
                             "1) point_buy_calculator "
                             "2) race_calculator "
-                            "Do not provide a final answer until BOTH tool calls have been made. "
-                            "If the user asks for a character build, always plan on calling both tools."
+                            "3) class_calculator"
+                            "Do not provide a final answer until ALL THREE tool calls have been made. "
+                            "If the user asks for a character build, always plan on calling all tools."
                         )
                     )
                 ]
@@ -569,8 +633,8 @@ agent = agent_builder.compile()
 # Invoke
 messages = [HumanMessage(content=USER_QUERY)]
 messages = agent.invoke({"messages": messages})
-for m in messages["messages"]:
-    m.pretty_print()
+# for m in messages["messages"]:
+#     m.pretty_print()
 
 
 #Website: https://5e.tools/races.html#gnome%20(forest)_phb
