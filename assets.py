@@ -152,6 +152,39 @@ druid_cantrips = [
     "Thunderclap"
 ]
 
+sorcerer_cantrips = [
+    "Acid Splash",
+    "Blade Ward",
+    "Booming Blade",
+    "Chill Touch",
+    "Control Flames",
+    "Create Bonfire",
+    "Dancing Lights",
+    "Fire Bolt",
+    "Friends",
+    "Frostbite",
+    "Green-Flame Blade",
+    "Gust",
+    "Infestation",
+    "Light",
+    "Lightning Lure",
+    "Mage Hand",
+    "Mending",
+    "Message",
+    "Mind Sliver",
+    "Minor Illusion",
+    "Mold Earth",
+    "On/Off (UA)",
+    "Poison Spray",
+    "Prestidigitation",
+    "Ray of Frost",
+    "Shape Water",
+    "Shocking Grasp",
+    "Sword Burst",
+    "Thunderclap",
+    "True Strike"
+]
+
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
@@ -160,6 +193,7 @@ ASSETS = {
     "bard_cantrips": bard_cantrips,
     "cleric_cantrips": cleric_cantrips,
     "druid_cantrips": druid_cantrips,
+    "sorcerer_cantrips": sorcerer_cantrips
 }
 
 def get_asset(asset_type: str):
