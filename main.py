@@ -478,6 +478,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     elif "monk" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
+        armour = []
         weapons = ["simple weapons", "shortswords"]
         instrument_decision = choose("instruments", get_asset("instruments"), 4)
         equipment.extend(instrument_decision)
@@ -538,6 +539,43 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.extend(["rapier", "shortsword", "leather armor", "2 daggers"])
         equipment.append(pack_decision)
         features.extend(["Sneak Attack (1d8 more damage on adv/enemy within 5 feet)", "Theives' Cant (Secretly talk with other thieves)"])
+    elif "sorcerer" in dnd_class:
+        HP = 6 + abilities[2]
+        hit_dice = "1d6"
+        #proficiencies
+        armour = []
+        weapons = ["daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
+        constitution += 2
+        charisma += 2
+        skills_decision = choose("skills", ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"], 2)
+        #equipment
+        equipment.extend(["light crossbow and 20 bolts", "two daggers"])
+        pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
+        equipment.append(pack_decision)
+        other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
+        equipment.append(other_equipment_decision)
+        #features
+        features.extend(["Spellcasting", "Sorcerous Origin"])
+        #TODO: create sorcerer cantrip list
+        cantrip_decision = choose("sorcerer cantrips", get_asset("sorcerer_cantrips"), 4)
+        cantrips.extend(cantrip_decision)
+
+        #Sorcerers only know 2 1st level spells at 1st level. 
+        #TODO: create first level spell list for sorcerer
+        spells_decision = choose("sorcerer spells", get_asset("sorcerer_spells"), 2)        
+        spells.extend(spells_decision)
+        spellslots = 2
+
+        #TODO: add features from sorcerous origin (can give extra spells, etc.)
+        #TODO: add more origins. For now, only the ones from Player's handbook according to dnd5e.wikidot.com/sorcerer
+        origin_decision = choose("sorcerous origin", ["Draconic Bloodline", "Wild Magic"])
+        features.append(origin_decision)
+
+
+
+    #TODO: check if I added tool/weapon proficiencies as equipment the character actually has
+    #TODO: add equipment from background
+
 
 
 
