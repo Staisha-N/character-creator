@@ -185,6 +185,43 @@ sorcerer_cantrips = [
     "True Strike"
 ]
 
+sorcerer_spells = [
+    "Absorb Elements",
+    "Acid Stream (UA)",
+    "Burning Hands",
+    "Catapult",
+    "Chaos Bolt",
+    "Charm Person",
+    "Chromatic Orb",
+    "Color Spray",
+    "Comprehend Languages",
+    "Detect Magic",
+    "Disguise Self",
+    "Distort Value",
+    "Earth Tremor",
+    "Expeditious Retreat",
+    "False Life",
+    "Feather Fall",
+    "Fog Cloud",
+    "Grease",
+    "Ice Knife",
+    "Id Insinuation (UA)",
+    "Infallible Relay (UA)",
+    "Jump",
+    "Mage Armor",
+    "Magic Missile",
+    "Ray of Sickness",
+    "Remote Access (UA)",
+    "Shield",
+    "Silent Image",
+    "Silvery Barbs",
+    "Sleep",
+    "Sudden Awakening (UA)",
+    "Tasha's Caustic Brew",
+    "Thunderwave",
+    "Witch Bolt"
+]
+
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
@@ -193,7 +230,8 @@ ASSETS = {
     "bard_cantrips": bard_cantrips,
     "cleric_cantrips": cleric_cantrips,
     "druid_cantrips": druid_cantrips,
-    "sorcerer_cantrips": sorcerer_cantrips
+    "sorcerer_cantrips": sorcerer_cantrips,
+    "sorcerer_spells": sorcerer_spells
 }
 
 def get_asset(asset_type: str):
