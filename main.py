@@ -556,12 +556,10 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.append(other_equipment_decision)
         #features
         features.extend(["Spellcasting", "Sorcerous Origin"])
-        #TODO: create sorcerer cantrip list
         cantrip_decision = choose("sorcerer cantrips", get_asset("sorcerer_cantrips"), 4)
         cantrips.extend(cantrip_decision)
 
         #Sorcerers only know 2 1st level spells at 1st level. 
-        #TODO: create first level spell list for sorcerer
         spells_decision = choose("sorcerer spells", get_asset("sorcerer_spells"), 2)        
         spells.extend(spells_decision)
         spellslots = 2
