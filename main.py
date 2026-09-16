@@ -568,6 +568,36 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         #TODO: add more origins. For now, only the ones from Player's handbook according to dnd5e.wikidot.com/sorcerer
         origin_decision = choose("sorcerous origin", ["Draconic Bloodline", "Wild Magic"])
         features.append(origin_decision)
+    elif "warlock" in dnd_class:
+        HP = 8 + abilities[2]
+        hit_dice = "1d8"
+        #proficiencies
+        armour = ["light armor"]
+        weapons = ["simple weapons"]
+        wisdom += 2
+        charisma += 2
+        skills_decision = choose("skills", ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"], 2)
+        #equipment
+        equipment.extend(["light crossbow and 20 bolts", "two daggers", "leather armor", "handaxe"])
+        pack_decision = choose("pack", ["dungeoneer's pack", "scholar's pack"])
+        equipment.append(pack_decision)
+        other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
+        equipment.append(other_equipment_decision)
+        #features
+        features.extend(["Pact Magic", "Otherworldly Patron"])
+        #TODO: create warlock cantrips list
+        cantrip_decision = choose("warlock cantrips", get_asset("warlock_cantrips"), 4)
+        cantrips.extend(cantrip_decision)
+
+        #Warlocks only know 2 1st level spells at 1st level. 
+        #TODO: create warlock spells list
+        spells_decision = choose("warlock spells", get_asset("warlock_spells"), 2)        
+        spells.extend(spells_decision)
+        spellslots = 2
+
+        #TODO: add features from patron (can give extra spells, etc.)
+        patron_decision = choose("otherworldly patron", ["the Archfey", "the Fiend", "the Great Old One"])
+        features.append(patron_decision)
 
 
 
