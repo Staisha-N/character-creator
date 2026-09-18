@@ -222,6 +222,30 @@ sorcerer_spells = [
     "Witch Bolt"
 ]
 
+warlock_cantrips = [
+    "Blade Ward",
+    "Booming Blade",
+    "Chill Touch",
+    "Create Bonfire",
+    "Eldritch Blast",
+    "Friends",
+    "Frostbite",
+    "Green-Flame Blade",
+    "Infestation",
+    "Lightning Lure",
+    "Mage Hand",
+    "Magic Stone",
+    "Mind Sliver",
+    "Minor Illusion",
+    "On/Off (UA)",
+    "Poison Spray",
+    "Prestidigitation",
+    "Sword Burst",
+    "Thunderclap",
+    "Toll the Dead",
+    "True Strike",
+]
+
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
@@ -231,7 +255,8 @@ ASSETS = {
     "cleric_cantrips": cleric_cantrips,
     "druid_cantrips": druid_cantrips,
     "sorcerer_cantrips": sorcerer_cantrips,
-    "sorcerer_spells": sorcerer_spells
+    "sorcerer_spells": sorcerer_spells,
+    "warlock_cantrips": warlock_cantrips
 }
 
 def get_asset(asset_type: str):

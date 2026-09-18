@@ -585,7 +585,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.append(other_equipment_decision)
         #features
         features.extend(["Pact Magic", "Otherworldly Patron"])
-        #TODO: create warlock cantrips list
         cantrip_decision = choose("warlock cantrips", get_asset("warlock_cantrips"), 4)
         cantrips.extend(cantrip_decision)
 
