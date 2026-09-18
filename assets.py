@@ -246,6 +246,28 @@ warlock_cantrips = [
     "True Strike",
 ]
 
+warlock_spells = [
+    "Armor of Agathys",
+    "Arms of Hadar",
+    "Cause Fear",
+    "Charm Person",
+    "Comprehend Languages",
+    "Distort Value",
+    "Expeditious Retreat",
+    "Healing Elixir (UA)",
+    "Hellish Rebuke",
+    "Hex",
+    "Id Insinuation (UA)",
+    "Illusory Script",
+    "Infallible Relay (UA)",
+    "Protection from Evil and Good",
+    "Puppet (UA)",
+    "Remote Access (UA)",
+    "Sense Emotion (UA)",
+    "Unseen Servant",
+    "Witch Bolt",
+]
+
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
@@ -256,7 +278,8 @@ ASSETS = {
     "druid_cantrips": druid_cantrips,
     "sorcerer_cantrips": sorcerer_cantrips,
     "sorcerer_spells": sorcerer_spells,
-    "warlock_cantrips": warlock_cantrips
+    "warlock_cantrips": warlock_cantrips,
+    "warlock_spells": warlock_spells
 }
 
 def get_asset(asset_type: str):

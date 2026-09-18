@@ -589,7 +589,6 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         cantrips.extend(cantrip_decision)
 
         #Warlocks only know 2 1st level spells at 1st level. 
-        #TODO: create warlock spells list
         spells_decision = choose("warlock spells", get_asset("warlock_spells"), 2)        
         spells.extend(spells_decision)
         spellslots = 2
