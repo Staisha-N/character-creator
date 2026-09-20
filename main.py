@@ -596,6 +596,29 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         #TODO: add features from patron (can give extra spells, etc.)
         patron_decision = choose("otherworldly patron", ["the Archfey", "the Fiend", "the Great Old One"])
         features.append(patron_decision)
+    elif "wizard" in dnd_class:
+            HP = 6 + abilities[2]
+            hit_dice = "1d6"
+            #proficiencies
+            weapons = ["Daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
+            wisdom += 2
+            intelligence += 2
+            skills_decision = choose("skills", ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"], 2)
+            #equipment
+            equipment.extend(["quarterstaff", "spellbook"])
+            pack_decision = choose("pack", ["explorer's pack", "scholar's pack"])
+            equipment.append(pack_decision)
+            other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
+            equipment.append(other_equipment_decision)
+            #features
+            features.extend(["Spellcasting", "Arcane Recovery"])
+            cantrip_decision = choose("wizard cantrips", get_asset("wizard_cantrips"), 3)
+            cantrips.extend(cantrip_decision)
+    
+            #Wizards only know 2 1st level spells at 1st level. 
+            spells_decision = choose("wizard spells", get_asset("wizard_spells"), 2)        
+            spells.extend(spells_decision)
+            spellslots = 2
 
 
 
