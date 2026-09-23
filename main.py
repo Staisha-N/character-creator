@@ -642,8 +642,16 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
 
     return [0]
     
+@tool
+def background_calculator(background: str = "default") -> list[int]:
+    """Choose my character's background
+    
+    Args:
+        background: the character's background; either acolyte, ciminal, folk hero, noble, sage or soldier.
+    """
+    return [0]
 
-tools = [point_buy_calculator, race_calculator, class_calculator]
+tools = [point_buy_calculator, race_calculator, class_calculator, background_calculator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
 
@@ -657,12 +665,13 @@ def llm_call(state: MessagesState):
                 [
                     SystemMessage(
                         content=(
-                            "You are a helpful assistant that must ALWAYS call exactly three tools, "
+                            "You are a helpful assistant that must ALWAYS call exactly four tools, "
                             "in this order: "
                             "1) point_buy_calculator "
                             "2) race_calculator "
                             "3) class_calculator"
-                            "Do not provide a final answer until ALL THREE tool calls have been made. "
+                            "4) background_calculator"
+                            "Do not provide a final answer until ALL FOUR tool calls have been made. "
                             "If the user asks for a character build, always plan on calling all tools."
                         )
                     )
