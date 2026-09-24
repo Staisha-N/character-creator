@@ -396,8 +396,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d12"
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["simple weapons", "martial weapons"]
-        strength += 2
-        constitution += 2
+        saving_throws.extend(["STR", "CON"])
         skills_decision = choose("skills", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
         skills.append(skills_decision)
         equipment.extend(["greataxe", "two handaxes", "explorer's pack", "four javelins"])
@@ -407,8 +406,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d8"
         armour = ["light armor"]
         weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
-        dexterity += 2
-        charisma += 2
+        saving_throws.extend(["DEX", "CHA"])
         skills_decision = choose("skills", get_asset("skills"), 3)
         skills.append(skills_decision)
         features.extend(["Spellcasting", "Bardic Inspiration"])
@@ -429,8 +427,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         weapons = ["simple"]
         saving_throws = ["wisdom", "charisma"]
         weapons = ["Simple weapons"]
-        wisdom += 2
-        charisma += 2
+        saving_throws.extend(["WIS", "CHA"])
         skills_decision = choose("skills", ["History", "Insight", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
         features.extend(["Spellcasting", "Divine Domain"])
@@ -448,8 +445,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d8"
         armour = ["light armor", "medium armor", "shields"]
         weapons = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
-        wisdom += 2
-        intelligence += 2
+        saving_throws.extend(["WIS", "INT"])
         skills_decision = choose("skills", ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], 2)
         skills.append(skills_decision)
         features.extend(["Spellcasting", "Druidic"])
@@ -465,8 +461,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d10"
         armour = ["light armor", "medium armor", "heavy armor", "shields"]
         weapons = ["simple weapons", "martial weapons"]
-        strength += 2
-        constitution += 2
+        saving_throws.extend(["STR", "CON"])
         skills_decision = choose("skills", ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], 2)
         skills.append(skills_decision)
         equipment.extend(["chain mail", "light crossbow and 20 bolts", "shield", "flail"])
@@ -482,8 +477,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         weapons = ["simple weapons", "shortswords"]
         instrument_decision = choose("instruments", get_asset("instruments"), 4)
         equipment.extend(instrument_decision)
-        strength += 2
-        dexterity += 2
+        saving_throws.extend(["STR", "DEX"])
         skills_decision = choose("skills", ["Acrobatics", "Athletics", "History", "Insight", "Religion", "Stealth"], 2)
         skills.append(skills_decision)
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
@@ -497,8 +491,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         hit_dice = "1d10"
         armour = ["light armor", "medium armor", "heavy armor", "shields"]
         weapons = ["simple weapons", "martial weapons"]
-        wisdom += 2
-        charisma += 2
+        saving_throws.extend(["WIS", "CHA"])
         skills_decision = choose("skills", ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
         pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
@@ -528,8 +521,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         armour = ["light armor"]
         weapons = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
         equipment.append("Thieves' tools")
-        dexterity += 2
-        intelligence += 2
+        saving_throws.extend(["DEX", "INT"])
         skills_decision = choose("skills", ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"], 4)
         expertise = choose("skills to be doubly proficient in because of rogue expertise", skills_decision, 2)
         skills.extend(expertise)
@@ -545,8 +537,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         #proficiencies
         armour = []
         weapons = ["daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
-        constitution += 2
-        charisma += 2
+        saving_throws.extend(["CHA", "CON"])
         skills_decision = choose("skills", ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"], 2)
         #equipment
         equipment.extend(["light crossbow and 20 bolts", "two daggers"])
@@ -574,8 +565,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         #proficiencies
         armour = ["light armor"]
         weapons = ["simple weapons"]
-        wisdom += 2
-        charisma += 2
+        saving_throws.extend(["WIS", "CHA"])
         skills_decision = choose("skills", ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"], 2)
         #equipment
         equipment.extend(["light crossbow and 20 bolts", "two daggers", "leather armor", "handaxe"])
@@ -601,6 +591,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
             hit_dice = "1d6"
             #proficiencies
             weapons = ["Daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
+            saving_throws.extend(["WIS", "INT"])
             wisdom += 2
             intelligence += 2
             skills_decision = choose("skills", ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"], 2)
