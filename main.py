@@ -640,6 +640,25 @@ def background_calculator(background: str = "default") -> list[int]:
     Args:
         background: the character's background; either acolyte, ciminal, folk hero, noble, sage or soldier.
     """
+    
+    skills = []
+    languages = []
+    equipment = []
+    features = []
+
+
+    if "acolyte" in background:
+        skills = ["insight", "religion"]
+        language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"], 2)
+        languages.append(language_decision)
+        equipment = ["incense x5", "vestments", "common clothes", "pouch with 15gp"]
+        holy_symbol_decision = choose("a holy symbol", ["amulet", "emblem", "relinquary"])
+        prayer_item_decision = choose("prayer item", ["prayer book", "prayer wheel"])
+        equipment.extend([holy_symbol_decision, prayer_item_decision])
+        god_decision = choose("a god to be in service of as an acolyte", get_asset("gods"))
+        features = ["Shelter of the Faithful", f"Worship {god_decision}"]
+
+
     return [0]
 
 tools = [point_buy_calculator, race_calculator, class_calculator, background_calculator]
