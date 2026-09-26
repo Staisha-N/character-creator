@@ -645,6 +645,7 @@ def background_calculator(background: str = "default") -> list[int]:
     languages = []
     equipment = []
     features = []
+    tools = []
 
 
     if "acolyte" in background:
@@ -657,6 +658,13 @@ def background_calculator(background: str = "default") -> list[int]:
         equipment.extend([holy_symbol_decision, prayer_item_decision])
         god_decision = choose("a god to be in service of as an acolyte", get_asset("gods"))
         features = ["Shelter of the Faithful", f"Worship {god_decision}"]
+    elif "criminal" in background:
+        skills = ["deception", "stealth"]
+        gaming_set_decision = choose("gaming set", ["dice set", "playing card set", "dragonset chess", "three-dragon ante set"])
+        tools = ["thieves' tools", gaming_set_decision]
+        equipment = ["crowbar", "dark common clothes with hood", "pouch with 15gp"]
+        criminal_specialty_decision = choose("criminal specialty", ["blackmailer", "burglar", "enforcer", "fence", "highway robber", "hired killer", "pickpocket", "smuggler"])
+        features = [criminal_specialty_decision, "criminal contact"]
 
 
     return [0]
