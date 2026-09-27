@@ -665,6 +665,13 @@ def background_calculator(background: str = "default") -> list[int]:
         equipment = ["crowbar", "dark common clothes with hood", "pouch with 15gp"]
         criminal_specialty_decision = choose("criminal specialty", ["blackmailer", "burglar", "enforcer", "fence", "highway robber", "hired killer", "pickpocket", "smuggler"])
         features = [criminal_specialty_decision, "criminal contact"]
+    elif "folk hero" in background:
+        skills = ["animal handling", "survival"]
+        artisan_tools_decison = choose("artisan's tools", get_asset("artisan_tools"))
+        tools = ["land vehicles", artisan_tools_decison]
+        equipment = [artisan_tools_decison, "shovel", "iron pot", "common clothes", "pounch with 10gp"]
+        event_decision = choose("folk hero's defining event", get_asset("defining_events"))
+        features = ["rustic hospitality", f"defining event: {event_decision}"]
 
 
     return [0]
