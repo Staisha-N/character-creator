@@ -363,7 +363,38 @@ gods = [
     "Waukeen, goddess of trade",    
 ]
 
+artisan_tools = [
+    "Alchemist's supplies",
+    "Brewer's supplies",
+    "Calligrapher's supplies",
+    "Carpenter's tools",
+    "Cartographer's tools",
+    "Cobbler's tools",
+    "Cook's utensils",
+    "Glassblower's tools",
+    "Jeweler's tools",
+    "Leatherworker's tools",
+    "Mason's tools",
+    "Painter's supplies",
+    "Potter's tools",
+    "Smith's tools",
+    "Tinker's tools",
+    "Weaver's tools",
+    "Woodcarver's tools",
+]
 
+defining_events = [
+    "I stood up to a tyrant’s agents.",
+    "I saved people during a natural disaster.",
+    "I stood alone against a terrible monster.",
+    "I stole from a corrupt merchant to help the poor.",
+    "I led a militia to fight off an invading army.",
+    "I broke into a tyrant’s castle and stole weapons to arm the people.",
+    "I trained the peasantry to use farm implements as weapons against a tyrant's soldiers.",
+    "A lord rescinded an unpopular decree after I led a symbolic act of protest against it.",
+    "A celestial, fey, or similar creature gave me a blessing or revealed my secret origin.",
+    "Recruited into a lord’s army, I rose to leadership and was commended for my heroism.",
+]
 ASSETS = {
     "skills": skills,
     "instruments": instruments,
@@ -377,7 +408,9 @@ ASSETS = {
     "warlock_cantrips": warlock_cantrips,
     "warlock_spells": warlock_spells,
     "wizard_spells": wizard_spells,
-    "gods": gods
+    "gods": gods,
+    "artisan_tools": artisan_tools,
+    "defining_events": defining_events,
 }
 
 def get_asset(asset_type: str):
