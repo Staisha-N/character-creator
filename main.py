@@ -672,6 +672,15 @@ def background_calculator(background: str = "default") -> list[int]:
         equipment = [artisan_tools_decison, "shovel", "iron pot", "common clothes", "pounch with 10gp"]
         event_decision = choose("folk hero's defining event", get_asset("defining_events"))
         features = ["rustic hospitality", f"defining event: {event_decision}"]
+    elif "noble" in background:
+        skills = ["history", "persuasion"]
+        gaming_set_decision = choose("gaming set", ["dice set", "playing card set", "dragonset chess", "three-dragon ante set"])
+        tools = ["thieves' tools", gaming_set_decision]
+        language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"], 2)
+        languages.append(language_decision)
+        equipment = ["fine clothes", "signet ring", "scroll of pedigree", "pouch with 25gp"]
+        feature = ["Position of Priviledge"]
+
 
 
     return [0]
