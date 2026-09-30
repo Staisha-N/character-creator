@@ -635,7 +635,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     
 @tool
 def background_calculator(background: str = "default") -> list[int]:
-    """Choose my character's background
+    """Choose my character's background that best fits their description
     
     Args:
         background: the character's background; either acolyte, ciminal, folk hero, noble, sage or soldier.
