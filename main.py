@@ -234,7 +234,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     """
     
     strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
-    tools = spells = skills = languages = combat = misc = []
+    tools = spells = skills = languages = combat = misc = [], [], [], [], [], []
 
     if "Dwarf" in race:
         constitution += 2
@@ -250,22 +250,6 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         else: #Mountain Dwarf
             strength += 2
             combat.extend(["light armor", "medium armor"])
-    elif "Elf" in race: 
-        dexterity += 2
-        speed = 30
-        vision = 60
-        combat.extend(["longsword", "shortsword", "shortbow", "longbow"])
-        skills.append("Perception")
-        languages = ["Common", "Elvish"]
-        if "High" in subrace:
-            intelligence += 1
-            language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
-            languages.append(language_decision)
-            spell_decision = choose("spell", get_asset("wizard_cantrips"))
-            spells.append(spell_decision)
-        else: #Wood Elf
-            wisdom += 1
-            speed = 35
     elif "Halfling" in race:
         dexterity += 2
         speed = 25
@@ -294,7 +278,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         intelligence += 2
         speed = 25
         vision = 60
-        languages.append(["Common", "Gnomish"])
+        languages.extend(["Common", "Gnomish"])
         misc.append("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
         if "Rock" in subrace:
             constitution += 1
@@ -315,7 +299,7 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
         languages.append(language_decision)
         skill_decision = choose("skills", get_asset("skills"), 2)
-        skills.append(skill_decision)
+        skills.extend(skill_decision)
     elif "Half-Orc" in race:     
         strength += 2
         constitution += 1
@@ -333,6 +317,22 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         misc.append("You have resistance to fire damage.")
         spells.append("thaumaturgy")
         languages =["Common", "Infernal"]
+    elif "Elf" in race: 
+        dexterity += 2
+        speed = 30
+        vision = 60
+        combat.extend(["longsword", "shortsword", "shortbow", "longbow"])
+        skills.append("Perception")
+        languages = ["Common", "Elvish"]
+        if "High" in subrace:
+            intelligence += 1
+            language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
+            languages.append(language_decision)
+            spell_decision = choose("spell", get_asset("wizard_cantrips"))
+            spells.append(spell_decision)
+        else: #Wood Elf
+            wisdom += 1
+            speed = 35
     else:
         print("ERROR: Identified a race outside of the options.")
 
@@ -731,7 +731,7 @@ def tool_node(state: dict):
     for tool_call in state["messages"][-1].tool_calls:
         tool = tools_by_name[tool_call["name"]]
         observation = tool.invoke(tool_call["args"])
-        result.append(ToolMessage(content=observation, tool_call_id=tool_call["id"]))
+        result.append(ToolMessage(content=str(observation), tool_call_id=tool_call["id"]))
     return {"messages": result} #Stop here and add these two results to global class
 
 
