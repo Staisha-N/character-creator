@@ -680,6 +680,14 @@ def background_calculator(background: str = "default") -> list[int]:
         languages.append(language_decision)
         equipment = ["fine clothes", "signet ring", "scroll of pedigree", "pouch with 25gp"]
         feature = ["Position of Priviledge"]
+    elif "sage" in background:
+        skills = ["Arcana", "History"]
+        language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"], 2)
+        languages.append(language_decision)
+        equipment = ["bottle of black ink", "quill", "small knife", "letter from dead colleage asking a question you can't answer yet", "common clothes", "pouch with 10gp"]
+        specialty_decision = choose("sage specialty", ["alchemist", "astronomer", "discredited academic", "librarian", "professor", "researcher", "wizard's apprentice", "scribe"])
+        features = ["Researcher", f"Sage specialty={specialty_decision}"]
+
 
 
 
