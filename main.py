@@ -6,7 +6,7 @@ from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from assets import get_asset
 
-llm = ChatOllama(model="llama3.1")
+llm = ChatOllama(model="qwen2.5")
 
 USER_QUERY = "Consider a cunning Dungeons and Dragons character that is a sneaky criminal. Call the tools to decider its modifiers, race and class."
 
