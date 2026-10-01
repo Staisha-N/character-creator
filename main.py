@@ -687,7 +687,13 @@ def background_calculator(background: str = "default") -> list[int]:
         equipment = ["bottle of black ink", "quill", "small knife", "letter from dead colleage asking a question you can't answer yet", "common clothes", "pouch with 10gp"]
         specialty_decision = choose("sage specialty", ["alchemist", "astronomer", "discredited academic", "librarian", "professor", "researcher", "wizard's apprentice", "scribe"])
         features = ["Researcher", f"Sage specialty={specialty_decision}"]
-
+    elif "soldier" in background:
+        skills = ["athletics", "intimidation"]
+        gaming_set_decision = choose("gaming set", ["bone dice set", "playing card set"])
+        tools = ["land vehicles", gaming_set_decision]
+        equipment = ["insignia of rank", gaming_set_decision, "set of common clothes", "pouch with 10gp"]
+        specialty_decision = choose("military specialty", ["officer", "scout", "infantry", "cavalry", "healer", "quartermaster", "standard bearer", "support staff"])
+        features = ["Military rank", f"specialty: {specialty_decision}"]
 
 
 
