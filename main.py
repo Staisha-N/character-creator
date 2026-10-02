@@ -8,7 +8,7 @@ from assets import get_asset
 
 llm = ChatOllama(model="qwen2.5")
 
-USER_QUERY = "Consider a cunning Dungeons and Dragons character that is a sneaky criminal. Call the tools to decider its modifiers, race and class."
+USER_QUERY = "Consider a cunning Dungeons and Dragons character that is a sneaky criminal. Call the tools to decider its modifiers, race, class, and background."
 
 #Only point buy and race affect the character's scores
 #The idea here would be to have two llm functions both modify the one Character object
