@@ -159,6 +159,8 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
             ability.set_priority(ability_count + 1) 
             ability_count += 1
 
+    for ability in abilities:
+        print("Ability: ", ability, " = ", ability.get_priority)
     # order the abilities array by priority, then increment the abilities one by one (if balanced)
     # and check at each increment if we exceed the total point allowance.
     # At the end, we will iterate over the abilities and translate the points to scores (+1, -1, etc.)
