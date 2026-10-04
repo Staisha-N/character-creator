@@ -102,7 +102,12 @@ myPointBuy = PointBuy()
 myCharacter = {
     "race": "",
     "subrace": "",
-    "abilities": [],
+    "strength": 0,
+    "dexterity": 0,
+    "constitution": 0,
+    "intelligence": 0,
+    "wisdom": 0,
+    "charisma": 0,
     "speed": 0,
     "vision": 0,
     "HP": 0,
@@ -236,7 +241,12 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     """
     
     strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
-    tools = spells = skills = languages = combat = misc = [], [], [], [], [], []
+    tools = []
+    spells = []
+    skills = []
+    languages = []
+    combat = []
+    misc = []
 
     if "Dwarf" in race:
         constitution += 2
@@ -785,3 +795,11 @@ messages = agent.invoke({"messages": messages})
 
 
 #Website: https://5e.tools/races.html#gnome%20(forest)_phb
+
+#TODO:create an object to hold all the character characteristics
+# Make 2 characters and simulate a combat sequence between them.
+# Modify one thing about the winning character and put them in another combat sequence
+# Continue for 100 rounds to find the best character.
+# Like genetic algorithm
+# Fill out the character sheet
+# Test your dnd character -> the user describes 
