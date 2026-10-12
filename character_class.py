@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 @dataclass
-class myCharacter:
+class Character:
     race: str=""
     subrace: str=""
     strength: int=0
