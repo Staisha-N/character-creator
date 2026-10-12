@@ -16,34 +16,7 @@ USER_QUERY = "Consider a cunning Dungeons and Dragons character that is a sneaky
 #The first will be in the tool for the point buy and the second will be in a second function 
 #that will determine the race, and do point calculations for race. Both will modify character object.
 #Then we call the aggregation function to combine them.
-
-class Scores():
-    def __init__(self, scores: list[int]):
-        self.stg = scores[0]
-        self.dex = scores[1]
-        self.con = scores[2]
-        self.inte = scores[3]
-        self.wis = scores[4]
-        self.cha = scores[5]
-
-class PointBuy():
-    def __init__(self):
-        self.pb_scores = None
-    def set_pb_scores(self, pb_scores: Scores):
-        self.pb_scores = pb_scores
-    def get_pb_scores(self):
-        return self.pb_scores
-
-class Character():
-    def __init__(self):
-        self.final_scores = None
-        self.walking_speed = None
-    def set_final_scores(self, final_scores: Scores):
-        self.final_scores = final_scores
-    def set_walking_speed(self, speed: int):
-        self.walking_speed = speed
     
-
 class Ability():
     def __init__(self, ID: int, description: str, priority: int, points: int):
         self.ID = ID
@@ -97,8 +70,6 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
         ability.set_modifier(modifier)
         
     return abilities
-
-myPointBuy = PointBuy()
 
 #TODO: there's going to be multiple characters, so create character class
 character = myCharacter()
@@ -190,10 +161,15 @@ def point_buy_calculator(stg: str = "default", dex: str = "default", con: str = 
     for i in range(6):
         final_scores.append(sorted_abilities_by_ID[i].get_points())
 
-    print("Final scores: ",final_scores)
-    
-    pb_scores = Scores(final_scores)
-    myPointBuy.set_pb_scores(pb_scores)
+    print("Final scores: ", final_scores)
+
+    #Abilities after point buy
+    myCharacter.strength += strength
+    myCharacter.dexterity += dexterity
+    myCharacter.constitution += constitution
+    myCharacter.intelligence += intelligence
+    myCharacter.wisdom += wisdom
+    myCharacter.charisma += charisma
 
     return final_scores
 
@@ -225,40 +201,43 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     """
     
     strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
-    tools = []
+    
+    tool_prof = []
+    weapon_prof = []
+
     spells = []
     skills = []
     languages = []
-    combat = []
-    misc = []
+    
+    race_misc = []
 
     if "Dwarf" in race:
         constitution += 2
         speed = 25
         vision = 60
-        combat.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
+        weapon_prof.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
         tool_decision = choose("tool proficiency", ["smith", "brewer", "mason"])
-        tools.append(tool_decision)
+        tool_prof.append(tool_decision)
         languages = ["Common", "Dwarvish"]
         if "Hill" in subrace:
             wisdom += 1
             HP += 1
         else: #Mountain Dwarf
             strength += 2
-            combat.extend(["light armor", "medium armor"])
+            weapon_prof.extend(["light armor", "medium armor"])
     elif "Halfling" in race:
         dexterity += 2
         speed = 25
         languages = ["Common", "Halfling"]
-        misc.append("When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.")
-        misc.append("You have advantage on saving throws against being frightened.")
-        misc.append("You can move through the space of any creature that is of a size larger than yours.")
+        race_misc.append("When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.")
+        race_misc.append("You have advantage on saving throws against being frightened.")
+        race_misc.append("You can move through the space of any creature that is of a size larger than yours.")
         if "Lightfoot" in subrace:
             charisma += 1
-            misc.append("You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.")
+            race_misc.append("You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.")
         else: #Stout Halfling
             constitution += 1
-            misc.append("You have advantage on saving throws against poison, and you have resistance against poison damage.")
+            race_misc.append("You have advantage on saving throws against poison, and you have resistance against poison damage.")
     elif "Human" in race:    
         strength += 1
         dexterity += 1
@@ -275,22 +254,22 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         speed = 25
         vision = 60
         languages.extend(["Common", "Gnomish"])
-        misc.append("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
+        race_misc.append("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
         if "Rock" in subrace:
             constitution += 1
-            misc.append("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.")
-            misc.append("You have proficiency with artisan's tools (tinker's tools).")
+            race_misc.append("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.")
+            race_misc.append("You have proficiency with artisan's tools (tinker's tools).")
         else: #Forest gnome
             dexterity += 1
-            misc.append("You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.")
-            misc.append("Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts.")
+            race_misc.append("You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.")
+            race_misc.append("Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts.")
     elif "Half-Elf" in race:
         charisma += 2
         dexterity += 1
         wisdom += 1
         speed = 30
         vision = 60
-        misc.append("You have advantage on saving throws against being charmed, and magic can't put you to sleep.")
+        race_misc.append("You have advantage on saving throws against being charmed, and magic can't put you to sleep.")
         languages = ["Common", "Elvish"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
         languages.append(language_decision)
@@ -303,21 +282,21 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         vision = 60
         languages = ["Common", "Orc"]
         skills.append("Intimidation")
-        misc.append("Once per long rest, at 0 hit points but not dead, you can drop to 1 hit point instead.")
-        misc.append("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.")
+        race_misc.append("Once per long rest, at 0 hit points but not dead, you can drop to 1 hit point instead.")
+        race_misc.append("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.")
     elif "Tiefling" in race:
         intelligence += 1
         charisma += 2
         speed = 30
         vision = 60
-        misc.append("You have resistance to fire damage.")
+        race_misc.append("You have resistance to fire damage.")
         spells.append("thaumaturgy")
         languages =["Common", "Infernal"]
     elif "Elf" in race: 
         dexterity += 2
         speed = 30
         vision = 60
-        combat.extend(["longsword", "shortsword", "shortbow", "longbow"])
+        weapon_prof.extend(["longsword", "shortsword", "shortbow", "longbow"])
         skills.append("Perception")
         languages = ["Common", "Elvish"]
         if "High" in subrace:
@@ -334,27 +313,32 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
 
+    #Abilities after race
+    myCharacter.strength += strength
+    myCharacter.dexterity += dexterity
+    myCharacter.constitution += constitution
+    myCharacter.intelligence += intelligence
+    myCharacter.wisdom += wisdom
+    myCharacter.charisma += charisma
+
+    #Stats from race
+    myCharacter.speed = speed
+    myCharacter.vision = vision
+    myCharacter.HP = HP
+
+    #Proficiencies from race
+    myCharacter.tool_profs.extend(tool_prof)
+    myCharacter.weapon_profs.extend(weapon_prof)
+
+    myCharacter.spells.extend(spells)
+    myCharacter.skills.extend(skills)
+    myCharacter.languages.extend(languages)
+    myCharacter.race_misc.extend(race_misc)
+
+    #Debugging prints
     final_scores = [strength, dexterity, constitution, intelligence, wisdom, charisma]
     print("Here are the scores: ", final_scores)
-    
-    myRaceDict = {
-        "race": race,
-        "subrace": subrace,
-        "abilities": final_scores,
-        "speed": speed,
-        "vision": vision,
-        "HP": HP,
-        "tools": tools,
-        "spells": spells,
-        "skills": skills,
-        "languages": languages,
-        "combat": combat,
-        "misc": misc,
-    }
-
-    myCharacter["abilities"] = final_scores
-
-    print("Here is the full race dictionary object: ", myRaceDict)
+    print("Here is mycharacter so far: ", myCharacter)
 
     return final_scores
 
