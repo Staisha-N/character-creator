@@ -5,6 +5,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from assets import get_asset
+from character_class import myCharacter
 
 llm = ChatOllama(model="qwen2.5")
 
@@ -99,25 +100,8 @@ def set_modifiers(abilities: list[Ability]) -> list[Ability]:
 
 myPointBuy = PointBuy()
 
-myCharacter = {
-    "race": "",
-    "subrace": "",
-    "strength": 0,
-    "dexterity": 0,
-    "constitution": 0,
-    "intelligence": 0,
-    "wisdom": 0,
-    "charisma": 0,
-    "speed": 0,
-    "vision": 0,
-    "HP": 0,
-    "tools": [],
-    "spells": [],
-    "skills": [],
-    "languages": [],
-    "combat": [],
-    "misc": [],
-}
+#TODO: there's going to be multiple characters, so create character class
+character = myCharacter()
 
 class CharacterBasics(BaseModel):
     Race: str = Field("low", description="Race - must be one of: Dwarf, Elf, Halfling, Human, Gnome, Half-Elf, Half-Orc or Tiefling.")
