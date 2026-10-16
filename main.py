@@ -351,45 +351,40 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     """
 
     dnd_class = dnd_class.lower()
-    HP = proficiency_bonus = spellslots = 0
+    HP = 0
+    #TODO: check if spellslots are always 2? 
     hit_dice = ""
     abilities = myCharacter["abilities"]
-    armour = []
-    weapons = []
+    armour_prof = []
+    weapon_prof = []
     saving_throws = []
-    features = []
+    class_misc = []
     skills = []
     equipment = []
     cantrips = []
     spells = []
     languages = []
-    strength = 0
-    dexterity = 0
-    constitution = 0
-    intelligence = 0
-    wisdom = 0
-    charisma = 0
 
     #TODO: fix the "extend" for results of calls to choose function
     if "barbarian" in dnd_class:
         HP = 12 + abilities[2] #12 + constitution mod
         hit_dice = "1d12"
-        armour = ["light armor", "medium armor", "shields"]
-        weapons = ["simple weapons", "martial weapons"]
+        armour_prof = ["light armor", "medium armor", "shields"]
+        weapon_prof = ["simple weapons", "martial weapons"]
         saving_throws.extend(["STR", "CON"])
         skills_decision = choose("skills", ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"], 2)
         skills.append(skills_decision)
         equipment.extend(["greataxe", "two handaxes", "explorer's pack", "four javelins"])
-        features.extend(["Rage", "Unarmored Defense"])
+        class_misc.extend(["Rage", "Unarmored Defense"])
     elif "bard" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
-        armour = ["light armor"]
-        weapons = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        armour_prof = ["light armor"]
+        weapon_prof = ["Simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
         saving_throws.extend(["DEX", "CHA"])
         skills_decision = choose("skills", get_asset("skills"), 3)
         skills.append(skills_decision)
-        features.extend(["Spellcasting", "Bardic Inspiration"])
+        class_misc.extend(["Spellcasting", "Bardic Inspiration"])
         pack_decision = choose("pack", ["entertainer's pack", "diplomat's pack"])
         equipment.append(pack_decision)
         instrument_decision = choose("instruments", get_asset("instruments"), 4)
@@ -403,14 +398,13 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     elif "cleric" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
-        armour = ["light armor", "medium armor", "shields"]
-        weapons = ["simple"]
+        armour_prof = ["light armor", "medium armor", "shields"]
+        weapon_prof = ["simple"]
         saving_throws = ["wisdom", "charisma"]
-        weapons = ["Simple weapons"]
         saving_throws.extend(["WIS", "CHA"])
         skills_decision = choose("skills", ["History", "Insight", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
-        features.extend(["Spellcasting", "Divine Domain"])
+        class_misc.extend(["Spellcasting", "Divine Domain"])
         pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
         equipment.append(pack_decision)
         equipment.extend(["mace", "scale mail", "light crossbow and 20 bolts", "shield"])
@@ -423,12 +417,12 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     elif "druid" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
-        armour = ["light armor", "medium armor", "shields"]
-        weapons = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
+        armour_prof = ["light armor", "medium armor", "shields"]
+        weapon_prof = ["Clubs", "daggers", "darts", "javelins", "maces", "quarterstaffs", "scimitars", "sickles", "slings", "spears"]
         saving_throws.extend(["WIS", "INT"])
         skills_decision = choose("skills", ["Arcana", "Animal Handling", "Insight", "Medicine", "Nature", "Perception", "Religion", "Survival"], 2)
         skills.append(skills_decision)
-        features.extend(["Spellcasting", "Druidic"])
+        class_misc.extend(["Spellcasting", "Druidic"])
         equipment.extend(["explorer's pack", "herbalism kit", "wooden shield", "scimitar", "leather armor"])
         equipment.extend(["mace", "scale mail", "light crossbow and 20 bolts", "shield"])
         cantrip_decision = choose("cleric cantrips", get_asset("cleric_cantrips"), 2)
@@ -439,8 +433,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     elif "fighter" in dnd_class:
         HP = 10 + abilities[2]
         hit_dice = "1d10"
-        armour = ["light armor", "medium armor", "heavy armor", "shields"]
-        weapons = ["simple weapons", "martial weapons"]
+        armour_prof = ["light armor", "medium armor", "heavy armor", "shields"]
+        weapon_prof = ["simple weapons", "martial weapons"]
         saving_throws.extend(["STR", "CON"])
         skills_decision = choose("skills", ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"], 2)
         skills.append(skills_decision)
@@ -448,13 +442,13 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
         fighting_style_decision = choose("fighting style", ["archery", "defense", "dueling", "great weapon fighting", "protection", "two-weapon fighting"])
-        features.extend([f"Fighting Style: {fighting_style_decision}", "Second Wind"])
+        class_misc.extend([f"Fighting Style: {fighting_style_decision}", "Second Wind"])
         #TODO: add Fighting Style bonus to equipment of fighter
     elif "monk" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
-        armour = []
-        weapons = ["simple weapons", "shortswords"]
+        armour_prof = []
+        weapon_prof = ["simple weapons", "shortswords"]
         instrument_decision = choose("instruments", get_asset("instruments"), 4)
         equipment.extend(instrument_decision)
         saving_throws.extend(["STR", "DEX"])
@@ -463,43 +457,42 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
         equipment.extend(["shortsword", "10 darts"])
-        features.extend(["Unarmored Defense", "Martial Arts"])
+        class_misc.extend(["Unarmored Defense", "Martial Arts"])
         #AC = 10 + Dex + Wis
         #damage= 1d4
     elif "paladin" in dnd_class:
         HP = 10 + abilities[2]
         hit_dice = "1d10"
-        armour = ["light armor", "medium armor", "heavy armor", "shields"]
-        weapons = ["simple weapons", "martial weapons"]
+        armour_prof = ["light armor", "medium armor", "heavy armor", "shields"]
+        weapon_prof = ["simple weapons", "martial weapons"]
         saving_throws.extend(["WIS", "CHA"])
         skills_decision = choose("skills", ["Athletics", "Insight", "Intimidation", "Medicine", "Persuasion", "Religion"], 2)
         skills.append(skills_decision)
         pack_decision = choose("pack", ["priest's pack", "explorer's pack"])
         equipment.append(pack_decision)
         equipment.extend(["flail", "shield", "5 javelins", "chain mail", "holy symbol"])
-        features.extend([f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)"])
+        class_misc.extend([f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)"])
     elif "ranger" in dnd_class:
         HP = 10 + abilities[2]
         hit_dice = "1d10"
-        armour = ["light armor", "medium armor", "shields"]
-        weapons = ["simple weapons", "martial weapons"]
-        strength += 2
-        dexterity += 2
+        armour_prof = ["light armor", "medium armor", "shields"]
+        weapon_prof = ["simple weapons", "martial weapons"]
+        saving_throws.extend(["DEX", "STR"])
         skills_decision = choose("skills", ["Animal Handling", "Athletics", "Insight", "Investigation", "Nature", "Perception", "Stealth", "Survival"], 2)
         skills.append(skills_decision)
         pack_decision = choose("pack", ["dungeoneer's pack", "explorer's pack"])
         equipment.append(pack_decision)
         equipment.extend(["scale mail", "two shortswords", "longbow", "quiver of 20 arrows"])
-        features.extend([f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)"])
+        class_misc.extend([f"{1 + abilities[5]}x Divine Senses", "5x Lay on Hands (heals 5 HP)"])
         enemy_decision = choose("favored enemy", ["aberrations", "beasts", "celestials", "constructs", "dragons", "elementals", "fey", "fiends", "giants", "monstrosities", "oozes", "plants", "undead"], 1)
         terrain_decision = choose("favored terrain", ["arctic", "coast", "desert", "forest", "grassland", "mountain", "swamp", "the Underdark"], 1)
-        features.extend([f"{enemy_decision} Favored enemy (adv on Wis/Int)", f"{terrain_decision} Natural Explorer (prof. bonus x2 for Wis/Int)"])
+        class_misc.extend([f"{enemy_decision} Favored enemy (adv on Wis/Int)", f"{terrain_decision} Natural Explorer (prof. bonus x2 for Wis/Int)"])
         languages.append([f"{enemy_decision}'s language"])
     elif "rogue" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
-        armour = ["light armor"]
-        weapons = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
+        armour_prof = ["light armor"]
+        weapon_prof = ["simple weapons", "hand crossbows", "longswords", "rapiers", "shortswords"]
         equipment.append("Thieves' tools")
         saving_throws.extend(["DEX", "INT"])
         skills_decision = choose("skills", ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"], 4)
@@ -510,13 +503,13 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         skills.extend(skills_decision)
         equipment.extend(["rapier", "shortsword", "leather armor", "2 daggers"])
         equipment.append(pack_decision)
-        features.extend(["Sneak Attack (1d8 more damage on adv/enemy within 5 feet)", "Theives' Cant (Secretly talk with other thieves)"])
+        class_misc.extend(["Sneak Attack (1d8 more damage on adv/enemy within 5 feet)", "Theives' Cant (Secretly talk with other thieves)"])
     elif "sorcerer" in dnd_class:
         HP = 6 + abilities[2]
         hit_dice = "1d6"
         #proficiencies
-        armour = []
-        weapons = ["daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
+        armour_prof = []
+        weapon_prof = ["daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
         saving_throws.extend(["CHA", "CON"])
         skills_decision = choose("skills", ["Arcana", "Deception", "Insight", "Intimidation", "Persuasion", "Religion"], 2)
         #equipment
@@ -525,8 +518,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.append(pack_decision)
         other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
         equipment.append(other_equipment_decision)
-        #features
-        features.extend(["Spellcasting", "Sorcerous Origin"])
+        #class_misc
+        class_misc.extend(["Spellcasting", "Sorcerous Origin"])
         cantrip_decision = choose("sorcerer cantrips", get_asset("sorcerer_cantrips"), 4)
         cantrips.extend(cantrip_decision)
 
@@ -535,16 +528,16 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         spells.extend(spells_decision)
         spellslots = 2
 
-        #TODO: add features from sorcerous origin (can give extra spells, etc.)
+        #TODO: add class_misc from sorcerous origin (can give extra spells, etc.)
         #TODO: add more origins. For now, only the ones from Player's handbook according to dnd5e.wikidot.com/sorcerer
         origin_decision = choose("sorcerous origin", ["Draconic Bloodline", "Wild Magic"])
-        features.append(origin_decision)
+        class_misc.append(origin_decision)
     elif "warlock" in dnd_class:
         HP = 8 + abilities[2]
         hit_dice = "1d8"
         #proficiencies
-        armour = ["light armor"]
-        weapons = ["simple weapons"]
+        armour_prof = ["light armor"]
+        weapon_prof = ["simple weapons"]
         saving_throws.extend(["WIS", "CHA"])
         skills_decision = choose("skills", ["Arcana", "Deception", "History", "Intimidation", "Investigation", "Nature", "Religion"], 2)
         #equipment
@@ -553,8 +546,8 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         equipment.append(pack_decision)
         other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
         equipment.append(other_equipment_decision)
-        #features
-        features.extend(["Pact Magic", "Otherworldly Patron"])
+        #class_misc
+        class_misc.extend(["Pact Magic", "Otherworldly Patron"])
         cantrip_decision = choose("warlock cantrips", get_asset("warlock_cantrips"), 4)
         cantrips.extend(cantrip_decision)
 
@@ -563,33 +556,31 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         spells.extend(spells_decision)
         spellslots = 2
 
-        #TODO: add features from patron (can give extra spells, etc.)
+        #TODO: add class_misc from patron (can give extra spells, etc.)
         patron_decision = choose("otherworldly patron", ["the Archfey", "the Fiend", "the Great Old One"])
-        features.append(patron_decision)
+        class_misc.append(patron_decision)
     elif "wizard" in dnd_class:
-            HP = 6 + abilities[2]
-            hit_dice = "1d6"
-            #proficiencies
-            weapons = ["Daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
-            saving_throws.extend(["WIS", "INT"])
-            wisdom += 2
-            intelligence += 2
-            skills_decision = choose("skills", ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"], 2)
-            #equipment
-            equipment.extend(["quarterstaff", "spellbook"])
-            pack_decision = choose("pack", ["explorer's pack", "scholar's pack"])
-            equipment.append(pack_decision)
-            other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
-            equipment.append(other_equipment_decision)
-            #features
-            features.extend(["Spellcasting", "Arcane Recovery"])
-            cantrip_decision = choose("wizard cantrips", get_asset("wizard_cantrips"), 3)
-            cantrips.extend(cantrip_decision)
-    
-            #Wizards only know 2 1st level spells at 1st level. 
-            spells_decision = choose("wizard spells", get_asset("wizard_spells"), 2)        
-            spells.extend(spells_decision)
-            spellslots = 2
+        HP = 6 + abilities[2]
+        hit_dice = "1d6"
+        #proficiencies
+        weapon_prof = ["Daggers", "darts", "slings", "quarterstaffs", "light crossbows"]
+        saving_throws.extend(["WIS", "INT"])
+        skills_decision = choose("skills", ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"], 2)
+        #equipment
+        equipment.extend(["quarterstaff", "spellbook"])
+        pack_decision = choose("pack", ["explorer's pack", "scholar's pack"])
+        equipment.append(pack_decision)
+        other_equipment_decision = choose("other equipment", ["component pouch", "arcane focus"])
+        equipment.append(other_equipment_decision)
+        #class_misc
+        class_misc.extend(["Spellcasting", "Arcane Recovery"])
+        cantrip_decision = choose("wizard cantrips", get_asset("wizard_cantrips"), 3)
+        cantrips.extend(cantrip_decision)
+
+        #Wizards only know 2 1st level spells at 1st level. 
+        spells_decision = choose("wizard spells", get_asset("wizard_spells"), 2)        
+        spells.extend(spells_decision)
+        spellslots = 2
 
 
 
@@ -604,12 +595,12 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
     print("Here is the class: ", dnd_class)
     print("HP=", HP)
     print("hit dice=", hit_dice)
-    print("armor=", armour)
-    print("weapons=", weapons)
+    print("armor=", armour_prof)
+    print("weapons=", weapon_prof)
     print("equipment=", equipment)
     print("skills=", skills)
     print("expertise=", expertise)
-    print("features=", features)
+    print("class_misc=", class_misc)
 
     return [0]
     

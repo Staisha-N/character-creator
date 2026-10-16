@@ -18,4 +18,12 @@ class Character:
     spells: list=field(default_factory=list)
     skills: list=field(default_factory=list)
     languages: list=field(default_factory=list)
-    misc: list=field(default_factory=list)
+    race_misc: list=field(default_factory=list)
+
+    dnd_class: str=""
+    hit_dice: str=""
+    saving_throws: list=field(default_factory=list)
+    class_misc: list=field(default_factory=list)
+    equipment: list=field(default_factory=list)
+    cantrips: list=field(default_factory=list)
+    spells: list=field(default_factory=list)
