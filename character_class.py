@@ -22,6 +22,7 @@ class Character:
 
     dnd_class: str=""
     hit_dice: str=""
+    armour_profs: list=field(default_factory=list)
     saving_throws: list=field(default_factory=list)
     class_misc: list=field(default_factory=list)
     equipment: list=field(default_factory=list)
