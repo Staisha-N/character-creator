@@ -200,17 +200,6 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
     
-    strength = dexterity = constitution = intelligence = wisdom = charisma = speed = vision = HP = 0
-    
-    tool_prof = []
-    weapon_profs = []
-
-    spells = []
-    skills = []
-    languages = []
-    
-    race_misc = []
-
     if "Dwarf" in race:
         myCharacter.constitution += 2
         myCharacter.speed = 25
@@ -312,35 +301,9 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         print("ERROR: Identified a race outside of the options.")
 
     print("\nRACE: ", race, "\nSUBRACE:", subrace, "\n")
-
-    #Abilities after race
-    myCharacter.strength += strength
-    myCharacter.dexterity += dexterity
-    myCharacter.constitution += constitution
-    myCharacter.intelligence += intelligence
-    myCharacter.wisdom += wisdom
-    myCharacter.charisma += charisma
-
-    #Stats from race
-    myCharacter.speed = speed
-    myCharacter.vision = vision
-    myCharacter.HP = HP
-
-    #Proficiencies from race
-    myCharacter.tool_profs.extend(tool_prof)
-    myCharacter.weapon_profss.extend(weapon_profs)
-
-    myCharacter.spells.extend(spells)
-    myCharacter.skills.extend(skills)
-    myCharacter.languages.extend(languages)
-    myCharacter.race_misc.extend(race_misc)
-
-    #Debugging prints
-    final_scores = [strength, dexterity, constitution, intelligence, wisdom, charisma]
-    print("Here are the scores: ", final_scores)
     print("Here is myCharacter after race changes: ", myCharacter)
 
-    return final_scores
+    return [0,0,0,0,0,0]
 
 @tool
 def class_calculator(dnd_class: str = "default") -> list[int]:
