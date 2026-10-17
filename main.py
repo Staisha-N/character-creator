@@ -212,102 +212,102 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
     race_misc = []
 
     if "Dwarf" in race:
-        constitution += 2
-        speed = 25
-        vision = 60
-        weapon_profs.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
+        myCharacter.constitution += 2
+        myCharacter.speed = 25
+        myCharacter.vision = 60
+        myCharacter.weapon_profs.extend(["battleaxe", "handaxe", "light hammer", "warhammer"])
         tool_decision = choose("tool proficiency", ["smith", "brewer", "mason"])
-        tool_prof.append(tool_decision)
-        languages = ["Common", "Dwarvish"]
+        myCharacter.tool_prof.append(tool_decision)
+        myCharacter.languages = ["Common", "Dwarvish"]
         if "Hill" in subrace:
-            wisdom += 1
-            HP += 1
+            myCharacter.wisdom += 1
+            myCharacter.HP += 1
         else: #Mountain Dwarf
-            strength += 2
-            weapon_profs.extend(["light armor", "medium armor"])
+            myCharacter.strength += 2
+            myCharacter.weapon_profs.extend(["light armor", "medium armor"])
     elif "Halfling" in race:
-        dexterity += 2
-        speed = 25
-        languages = ["Common", "Halfling"]
-        race_misc.append("When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.")
-        race_misc.append("You have advantage on saving throws against being frightened.")
-        race_misc.append("You can move through the space of any creature that is of a size larger than yours.")
+        myCharacter.dexterity += 2
+        myCharacter.speed = 25
+        myCharacter.languages = ["Common", "Halfling"]
+        myCharacter.race_misc.append("When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.")
+        myCharacter.race_misc.append("You have advantage on saving throws against being frightened.")
+        myCharacter.race_misc.append("You can move through the space of any creature that is of a size larger than yours.")
         if "Lightfoot" in subrace:
-            charisma += 1
-            race_misc.append("You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.")
+            myCharacter.charisma += 1
+            myCharacter.race_misc.append("You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.")
         else: #Stout Halfling
-            constitution += 1
-            race_misc.append("You have advantage on saving throws against poison, and you have resistance against poison damage.")
+            myCharacter.constitution += 1
+            myCharacter.race_misc.append("You have advantage on saving throws against poison, and you have resistance against poison damage.")
     elif "Human" in race:    
-        strength += 1
-        dexterity += 1
-        constitution += 1
-        intelligence += 1
-        wisdom += 1
-        charisma += 1
-        speed = 30
-        languages = ["Common"]
+        myCharacter.strength += 1
+        myCharacter.dexterity += 1
+        myCharacter.constitution += 1
+        myCharacter.intelligence += 1
+        myCharacter.wisdom += 1
+        myCharacter.charisma += 1
+        myCharacter.speed = 30
+        myCharacter.languages = ["Common"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
-        languages.append(language_decision)
+        myCharacter.languages.append(language_decision)
     elif "Gnome" in race:   
-        intelligence += 2
-        speed = 25
-        vision = 60
-        languages.extend(["Common", "Gnomish"])
-        race_misc.append("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
+        myCharacter.intelligence += 2
+        myCharacter.speed = 25
+        myCharacter.vision = 60
+        myCharacter.languages.extend(["Common", "Gnomish"])
+        myCharacter.race_misc.append("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
         if "Rock" in subrace:
-            constitution += 1
-            race_misc.append("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.")
-            race_misc.append("You have proficiency with artisan's tools (tinker's tools).")
+            myCharacter.constitution += 1
+            myCharacter.race_misc.append("Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.")
+            myCharacter.race_misc.append("You have proficiency with artisan's tools (tinker's tools).")
         else: #Forest gnome
-            dexterity += 1
-            race_misc.append("You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.")
-            race_misc.append("Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts.")
+            myCharacter.dexterity += 1
+            myCharacter.race_misc.append("You know the minor illusion cantrip. Intelligence is your spellcasting ability for it.")
+            myCharacter.race_misc.append("Through sounds and gestures, you can communicate simple ideas with Small or smaller beasts.")
     elif "Half-Elf" in race:
-        charisma += 2
-        dexterity += 1
-        wisdom += 1
-        speed = 30
-        vision = 60
-        race_misc.append("You have advantage on saving throws against being charmed, and magic can't put you to sleep.")
-        languages = ["Common", "Elvish"]
+        myCharacter.charisma += 2
+        myCharacter.dexterity += 1
+        myCharacter.wisdom += 1
+        myCharacter.speed = 30
+        myCharacter.vision = 60
+        myCharacter.race_misc.append("You have advantage on saving throws against being charmed, and magic can't put you to sleep.")
+        myCharacter.languages = ["Common", "Elvish"]
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
-        languages.append(language_decision)
+        myCharacter.languages.append(language_decision)
         skill_decision = choose("skills", get_asset("skills"), 2)
-        skills.extend(skill_decision)
+        myCharacter.skills.extend(skill_decision)
     elif "Half-Orc" in race:     
-        strength += 2
-        constitution += 1
-        speed = 30
-        vision = 60
-        languages = ["Common", "Orc"]
-        skills.append("Intimidation")
-        race_misc.append("Once per long rest, at 0 hit points but not dead, you can drop to 1 hit point instead.")
-        race_misc.append("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.")
+        myCharacter.strength += 2
+        myCharacter.constitution += 1
+        myCharacter.speed = 30
+        myCharacter.vision = 60
+        myCharacter.languages = ["Common", "Orc"]
+        myCharacter.skills.append("Intimidation")
+        myCharacter.race_misc.append("Once per long rest, at 0 hit points but not dead, you can drop to 1 hit point instead.")
+        myCharacter.race_misc.append("When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.")
     elif "Tiefling" in race:
-        intelligence += 1
-        charisma += 2
-        speed = 30
-        vision = 60
-        race_misc.append("You have resistance to fire damage.")
-        spells.append("thaumaturgy")
-        languages =["Common", "Infernal"]
+        myCharacter.intelligence += 1
+        myCharacter.charisma += 2
+        myCharacter.speed = 30
+        myCharacter.vision = 60
+        myCharacter.race_misc.append("You have resistance to fire damage.")
+        myCharacter.spells.append("thaumaturgy")
+        myCharacter.languages =["Common", "Infernal"]
     elif "Elf" in race: 
-        dexterity += 2
-        speed = 30
-        vision = 60
-        weapon_profs.extend(["longsword", "shortsword", "shortbow", "longbow"])
-        skills.append("Perception")
-        languages = ["Common", "Elvish"]
+        myCharacter.dexterity += 2
+        myCharacter.speed = 30
+        myCharacter.vision = 60
+        myCharacter.weapon_profs.extend(["longsword", "shortsword", "shortbow", "longbow"])
+        myCharacter.skills.append("Perception")
+        myCharacter.languages = ["Common", "Elvish"]
         if "High" in subrace:
-            intelligence += 1
+            myCharacter.intelligence += 1
             language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"])
-            languages.append(language_decision)
+            myCharacter.languages.append(language_decision)
             spell_decision = choose("spell", get_asset("wizard_cantrips"))
-            spells.append(spell_decision)
+            myCharacter.spells.append(spell_decision)
         else: #Wood Elf
-            wisdom += 1
-            speed = 35
+            myCharacter.wisdom += 1
+            myCharacter.speed = 35
     else:
         print("ERROR: Identified a race outside of the options.")
 
