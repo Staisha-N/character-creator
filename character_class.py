@@ -28,3 +28,5 @@ class Character:
     equipment: list=field(default_factory=list)
     cantrips: list=field(default_factory=list)
     spells: list=field(default_factory=list)
+
+    background_misc: list=field(default_factory=list)

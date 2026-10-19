@@ -535,63 +535,55 @@ def background_calculator(background: str = "default") -> list[int]:
     Args:
         background: the character's background; either acolyte, ciminal, folk hero, noble, sage or soldier.
     """
-    
-    skills = []
-    languages = []
-    equipment = []
-    features = []
-    tools = []
-
 
     if "acolyte" in background:
-        skills = ["insight", "religion"]
+        myCharacter.skills.extend(["insight", "religion"])
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"], 2)
-        languages.append(language_decision)
-        equipment = ["incense x5", "vestments", "common clothes", "pouch with 15gp"]
+        myCharacter.languages.append(language_decision)
+        myCharacter.equipment.extend(["incense x5", "vestments", "common clothes", "pouch with 15gp"])
         holy_symbol_decision = choose("a holy symbol", ["amulet", "emblem", "relinquary"])
         prayer_item_decision = choose("prayer item", ["prayer book", "prayer wheel"])
-        equipment.extend([holy_symbol_decision, prayer_item_decision])
+        myCharacter.equipment.extend([holy_symbol_decision, prayer_item_decision])
         god_decision = choose("a god to be in service of as an acolyte", get_asset("gods"))
-        features = ["Shelter of the Faithful", f"Worship {god_decision}"]
+        myCharacter.background_misc.extend(["Shelter of the Faithful", f"Worship {god_decision}"])
     elif "criminal" in background:
-        skills = ["deception", "stealth"]
+        myCharacter.skills.extend(["deception", "stealth"])
         gaming_set_decision = choose("gaming set", ["dice set", "playing card set", "dragonset chess", "three-dragon ante set"])
-        tools = ["thieves' tools", gaming_set_decision]
-        equipment = ["crowbar", "dark common clothes with hood", "pouch with 15gp"]
+        myCharacter.tool_profs.extend(["thieves' tools", gaming_set_decision])
+        myCharacter.equipment.extend(["crowbar", "dark common clothes with hood", "pouch with 15gp"])
         criminal_specialty_decision = choose("criminal specialty", ["blackmailer", "burglar", "enforcer", "fence", "highway robber", "hired killer", "pickpocket", "smuggler"])
-        features = [criminal_specialty_decision, "criminal contact"]
+        myCharacter.background_misc.extend([criminal_specialty_decision, "criminal contact"])
     elif "folk hero" in background:
-        skills = ["animal handling", "survival"]
+        myCharacter.skills.extend(["animal handling", "survival"])
         artisan_tools_decison = choose("artisan's tools", get_asset("artisan_tools"))
-        tools = ["land vehicles", artisan_tools_decison]
-        equipment = [artisan_tools_decison, "shovel", "iron pot", "common clothes", "pounch with 10gp"]
+        myCharacter.tool_profs.extend["land vehicles", artisan_tools_decison])
+        myCharacter.equipment.extend([artisan_tools_decison, "shovel", "iron pot", "common clothes", "pounch with 10gp"])
         event_decision = choose("folk hero's defining event", get_asset("defining_events"))
-        features = ["rustic hospitality", f"defining event: {event_decision}"]
+        myCharacter.background_misc.extend(["rustic hospitality", f"defining event: {event_decision}"])
     elif "noble" in background:
-        skills = ["history", "persuasion"]
+        myCharacter.skills.extend(["history", "persuasion"])
         gaming_set_decision = choose("gaming set", ["dice set", "playing card set", "dragonset chess", "three-dragon ante set"])
-        tools = ["thieves' tools", gaming_set_decision]
+        myCharacter.tool_profs.extend(["thieves' tools", gaming_set_decision])
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"], 2)
-        languages.append(language_decision)
-        equipment = ["fine clothes", "signet ring", "scroll of pedigree", "pouch with 25gp"]
-        feature = ["Position of Priviledge"]
+        myCharacter.languages.append(language_decision)
+        myCharacter.equipment.extend(["fine clothes", "signet ring", "scroll of pedigree", "pouch with 25gp"])
+        myCharacter.background_misc.extend(["Position of Priviledge"])
     elif "sage" in background:
-        skills = ["Arcana", "History"]
+        myCharacter.skills.extend(["Arcana", "History"])
         language_decision = choose("languge", ["Dwarvish", "Halfling", "Gnomish", "Giant", "Goblin", "Orc"], 2)
-        languages.append(language_decision)
-        equipment = ["bottle of black ink", "quill", "small knife", "letter from dead colleage asking a question you can't answer yet", "common clothes", "pouch with 10gp"]
+        myCharacter.languages.append(language_decision)
+        myCharacter.equipment.extend(["bottle of black ink", "quill", "small knife", "letter from dead colleage asking a question you can't answer yet", "common clothes", "pouch with 10gp"])
         specialty_decision = choose("sage specialty", ["alchemist", "astronomer", "discredited academic", "librarian", "professor", "researcher", "wizard's apprentice", "scribe"])
-        features = ["Researcher", f"Sage specialty={specialty_decision}"]
+        myCharacter.background_misc.extend(["Researcher", f"Sage specialty={specialty_decision}"])
     elif "soldier" in background:
-        skills = ["athletics", "intimidation"]
+        myCharacter.skills.extend(["athletics", "intimidation"])
         gaming_set_decision = choose("gaming set", ["bone dice set", "playing card set"])
-        tools = ["land vehicles", gaming_set_decision]
-        equipment = ["insignia of rank", gaming_set_decision, "set of common clothes", "pouch with 10gp"]
+        myCharacter.tool_profs.extend(["land vehicles", gaming_set_decision])
+        myCharacter.equipment.extend(["insignia of rank", gaming_set_decision, "set of common clothes", "pouch with 10gp"])
         specialty_decision = choose("military specialty", ["officer", "scout", "infantry", "cavalry", "healer", "quartermaster", "standard bearer", "support staff"])
-        features = ["Military rank", f"specialty: {specialty_decision}"]
+        myCharacter.background_misc.extend(["Military rank", f"specialty: {specialty_decision}"])
 
-
-
+    print("Here is myCharacter after background changes: ", myCharacter)
     return [0]
 
 tools = [point_buy_calculator, race_calculator, class_calculator, background_calculator]
