@@ -556,7 +556,7 @@ def background_calculator(background: str = "default") -> list[int]:
     elif "folk hero" in background:
         myCharacter.skills.extend(["animal handling", "survival"])
         artisan_tools_decison = choose("artisan's tools", get_asset("artisan_tools"))
-        myCharacter.tool_profs.extend["land vehicles", artisan_tools_decison])
+        myCharacter.tool_profs.extend(["land vehicles", artisan_tools_decison])
         myCharacter.equipment.extend([artisan_tools_decison, "shovel", "iron pot", "common clothes", "pounch with 10gp"])
         event_decision = choose("folk hero's defining event", get_asset("defining_events"))
         myCharacter.background_misc.extend(["rustic hospitality", f"defining event: {event_decision}"])
