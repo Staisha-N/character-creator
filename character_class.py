@@ -29,4 +29,5 @@ class Character:
     cantrips: list=field(default_factory=list)
     spells: list=field(default_factory=list)
 
+    background: str=""
     background_misc: list=field(default_factory=list)

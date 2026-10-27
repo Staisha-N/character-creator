@@ -199,6 +199,9 @@ def race_calculator(race: str = "default", subrace: str = "default") -> list[int
         race: the character's race; either Dwarf, Elf, Halfling, Human, Gnome, Half-Elf, Half-Orc or Tiefling
         subrace: the character's subrace if applicable. Only Dwarf, Elf, Halfling and Gnome can have a subrace. Dwarf can be Hill or Mountain, Elf and be High or Wood, Halfling can be Lightfoot or Stout and Gnome can be Forest or Rock.
     """
+
+    myCharacter.race = race
+    myCharacter.subrace = '' if subrace == "default" else subrace
     
     if "Dwarf" in race:
         myCharacter.constitution += 2
@@ -313,6 +316,7 @@ def class_calculator(dnd_class: str = "default") -> list[int]:
         class: the character's class; either Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, or Wizard.
     """
 
+    myCharacter.dnd_class = dnd_class
     #TODO: check if spellslots are always 2? 
 
     if "barbarian" in dnd_class:
@@ -535,6 +539,8 @@ def background_calculator(background: str = "default") -> list[int]:
     Args:
         background: the character's background; either acolyte, ciminal, folk hero, noble, sage or soldier.
     """
+
+    myCharacter.background = background
 
     if "acolyte" in background:
         myCharacter.skills.extend(["insight", "religion"])
