@@ -20,9 +20,6 @@ writer = PdfWriter(clone_from=reader)
 
 writer.pages[0].merge_page(overlay_reader.pages[0])
 
-for page in reader.pages[1:]:
-    writer.add_page(page)
-
 with open("pdfs/output_stamped.pdf", "wb") as f:
     writer.write(f)
 
