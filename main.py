@@ -592,7 +592,17 @@ def background_calculator(background: str = "default") -> list[int]:
     print("Here is myCharacter after background changes: ", myCharacter)
     return [0]
 
-tools = [point_buy_calculator, race_calculator, class_calculator, background_calculator]
+@tool
+def pick_name() -> list[int]:
+    """Choose a character's name based on their description"""
+
+    llm_decision = llm.invoke(f"I am trying to build a character that can be summarized by this statement: {USER_QUERY}. Here is the character that's been built so far: {myCharacter} Reply with a suggestion for this character's name. Reply with only one word.")
+    name = llm_decision.content
+    print("Here is the character's name: ", name)
+    myCharacter.name = name
+    return [0]
+
+tools = [point_buy_calculator, race_calculator, class_calculator, background_calculator, pick_name]
 tools_by_name = {tool.name: tool for tool in tools}
 llm_with_tools = llm.bind_tools(tools)
 
@@ -606,13 +616,14 @@ def llm_call(state: MessagesState):
                 [
                     SystemMessage(
                         content=(
-                            "You are a helpful assistant that must ALWAYS call exactly four tools, "
+                            "You are a helpful assistant that must ALWAYS call exactly five tools, "
                             "in this order: "
                             "1) point_buy_calculator "
                             "2) race_calculator "
                             "3) class_calculator"
                             "4) background_calculator"
-                            "Do not provide a final answer until ALL FOUR tool calls have been made. "
+                            "5) pick_name"
+                            "Do not provide a final answer until ALL FIVE tool calls have been made. "
                             "If the user asks for a character build, always plan on calling all tools."
                         )
                     )

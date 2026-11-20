@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Character:
+    name: str=""
     race: str=""
     subrace: str=""
     strength: int=0
