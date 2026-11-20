@@ -6,6 +6,7 @@ from langgraph.graph import MessagesState
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from assets import get_asset
 from character_class import Character
+from character_sheet import fill_character_sheet
 
 llm = ChatOllama(model="qwen2.5")
 
@@ -685,6 +686,7 @@ messages = agent.invoke({"messages": messages})
 # for m in messages["messages"]:
 #     m.pretty_print()
 
+#fill_character_sheet(myCharacter)
 
 #Website: https://5e.tools/races.html#gnome%20(forest)_phb
 
